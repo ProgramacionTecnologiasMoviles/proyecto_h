@@ -18,10 +18,11 @@ return new class extends Migration
             $table->unsignedBigInteger("guessUser");
             $table->foreign("guessUser")->references("id")->on("users");
             $table->integer("creditsbetted");
-            $table->string("game")->nullable();
-            $table->unsignedBigInteger("winner");
+            $table->unsignedBigInteger("game");
+            $table->foreign("game")->references("id")->on("games");
+            $table->unsignedBigInteger("winner")->nullable();
             $table->foreign("winner")->references("id")->on("users");
-            $table->unsignedBigInteger("loser");
+            $table->unsignedBigInteger("loser")->nullable();
             $table->foreign("loser")->references("id")->on("users");
             $table->string("score")->nullable();
             $table->timestamps();

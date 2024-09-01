@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Matched;
+use App\Models\Matches;
 use Illuminate\Http\Request;
 
 class MatchController extends Controller
 {
     public function index(Request $request)
     {
-        $match=Matched::all();
+        $match=Matches::all();
         return response()->json($bank);
     }
 
@@ -17,17 +17,17 @@ class MatchController extends Controller
      */
     public function store(Request $request)
     {
-        $match=new Matched();
+        $match=new Matches();
         $match->hostUser =$request->hostUser;
         $match->guessUser =$request->guessUser;
-        $match->creditsbetted =$request->guess_user;
+        $match->creditsbetted =$request->creditsbetted;
         $match->game =$request->game;
         $match->winner =$request->winner;
         $match->loser =$request->loser;
         $match->score =$request->score;
-        $bank->save();
+        $match->save();
 
-        return response()->json("El registro de la partida se ha agregado exitosamente",201);
+        return response()->json(['id' => $match->id], 201);
     }
 
     /**
@@ -35,7 +35,7 @@ class MatchController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $bank=Matched::find($id);
+        $bank=Matches::find($id);
         $match->hostUser =$request->hostUser;
         $match->guessUser =$request->guessUser;
         $match->creditsbetted =$request->guess_user;
@@ -54,7 +54,7 @@ class MatchController extends Controller
      */
     public function destroy(string $id)
     {
-        $bank=Matched::find($id);
+        $bank=Matches::find($id);
         $bank->delete();
         return response()->json("El Registro de la partida se ha eliminado exitosamente",200);
     }

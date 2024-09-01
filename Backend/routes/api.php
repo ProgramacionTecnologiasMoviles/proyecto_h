@@ -39,4 +39,6 @@ Route::delete('/users/{id}', [UsersController::class,'destroy'])->middleware('au
 Route::resource('/bank_accounts', bankAccountController::class);
 #-------------------------------------GAME----------------------------------#
 Route::resource('/Game', GameController::class);
+#-------------------------------------GAME----------------------------------#
+Route::resource('/match', MatchController::class)->middleware('auth:sanctum');
 
