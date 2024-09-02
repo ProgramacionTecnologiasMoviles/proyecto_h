@@ -5,6 +5,18 @@
 - Joseph Felipe Grijalva Lozano
 - Juan Daniel Gonzalez Gonzalez
 
+## Como correr el proyecto
+
+1. Copiar el `.env.example` en .env
+2. Correr los siguientes comandos
+
+```
+$ docker compose up --build
+$ docker exec -it backend-web-1 php artisan migrate
+```
+
+3. El servidor esta corriendo en el puerto 8000
+
 ## Modelo Relacional
 
 El modelo consiste de 4 tablas, user, bank_account, matches y games, tanto las tablas de partidas como de la cuenta de banco estan relacionas con el usuario, en el caso de la cuenta de banco el usuario podra tener varias de estas, y de igual manera para las partidas, pero estas solo corresponden a un usuario, el proceso de autenticación para el usuario se realiza a partir de sanctum.
@@ -43,6 +55,7 @@ Rutas disponibles en la API, incluyendo los métodos HTTP soportados, parámetro
     "status": 200
   }
   ```
+
 - GET (Obtener usuario actual)
 
   Necesita el token dado al realizar el login.
@@ -65,6 +78,7 @@ Rutas disponibles en la API, incluyendo los métodos HTTP soportados, parámetro
     "updated_at": "2024-09-02T02:41:20.000000Z"
   }
   ```
+
 - PUT (Actualiza el usuario)
 
   Necesita el token dado al realizar el login.
@@ -86,6 +100,7 @@ Rutas disponibles en la API, incluyendo los métodos HTTP soportados, parámetro
   ```
     "El Usuario se ha actualizado exitosamente"
   ```
+
 - DELETE ( Elimina usuario)
 
   Necesita el token dado al realizar el login.
@@ -122,6 +137,7 @@ Todas las peticiones necesitan el token dado al realizar el login.
   ```
    "El Registro Bancario se ha agregado exitosamente"
   ```
+
 - GET (Retorna cuentas de banco del usario)
 
   URL : ` http://localhost:8000/api/bank_accounts`
@@ -140,6 +156,7 @@ Todas las peticiones necesitan el token dado al realizar el login.
     }
   ]
   ```
+
 - PUT (Actualiza cuenta de banco en especifico)
 
   URL : ` http://localhost:8000/api/bank_accounts/{id}`
@@ -159,6 +176,7 @@ Todas las peticiones necesitan el token dado al realizar el login.
   ```
    "El Registro Bancario se ha actualizado exitosamente"
   ```
+
 - DELETE (Elimina la cuenta de banco )
 
   URL : ` http://localhost:8000/api/bank_accounts/{id}`
@@ -197,6 +215,7 @@ Todas las peticiones necesitan el token dado al realizar el login.
         }
     ]
   ```
+
 - GET (Lista juegos)
 
   URL : ` http://localhost:8000/api/Game`
@@ -221,6 +240,7 @@ Todas las peticiones necesitan el token dado al realizar el login.
     }
   ]
   ```
+
 - DELETE (Eliminar juego)
 
   URL : ` http://localhost:8000/api/Game/{id}`
@@ -230,6 +250,7 @@ Todas las peticiones necesitan el token dado al realizar el login.
   ```
   "El Registro del juego se ha eliminado exitosamente"
   ```
+
 - PUT (Actualizar juego especifico)
 
   URL : ` http://localhost:8000/api/Game/{id}`
@@ -277,6 +298,7 @@ Todas las peticiones necesitan el token dado al realizar el login.
     "id": 5
     }
   ```
+
 - GET (Lista partidas)
 
   URL : ` http://localhost:8000/api/match`
@@ -311,6 +333,7 @@ Todas las peticiones necesitan el token dado al realizar el login.
     }
   ]
   ```
+
 - DELETE (Elimina partida)
 
   URL : ` http://localhost:8000/api/match/{id}`
@@ -320,6 +343,7 @@ Todas las peticiones necesitan el token dado al realizar el login.
   ```
   "El Registro de la partida se ha eliminado exitosamente"
   ```
+
 - PUT (Actualizar partida especifica)
 
   URL : ` http://localhost:8000/api/match/{id}`
