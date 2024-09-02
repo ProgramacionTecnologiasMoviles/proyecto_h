@@ -35,9 +35,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::post('/users', [UsersController::class,'store']);
 Route::put('/users/{id}', [UsersController::class,'update'])->middleware('auth:sanctum');
 #----------------------------CREDITS---------------------------------#
-Route::post('/update_Credits', [UsersController::class, 'updateCredits']);
-
-Route::delete('/users/{id}', [UsersController::class,'destroy'])->middleware('auth:sanctum');
+Route::post('/update_Credits', [UsersController::class, 'updateCredits'])->middleware('auth:sanctum');
+Route::get('/totalcreditswon', [UsersController::class, 'totalCreditsWon'])->middleware('auth:sanctum');
+Route::get('/users/{id}/total_credits_won', [UsersController::class, 'totalCreditsWon'])->middleware('auth:sanctum');
+Route::get('/users/{id}/total_credits_lose', [UsersController::class, 'totalCreditsLose'])->middleware('auth:sanctum');
 #----------------------------LEADERBOARD---------------------------------#
 
 Route::get('/leaderboard', [UsersController::class, 'leaderBoardWins']);

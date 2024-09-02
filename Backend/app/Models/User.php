@@ -13,7 +13,11 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
     public function matchesWon()
     {
-        return $this->hasMany('App\Models\Matches', 'Winner', 'id');
+        return $this->hasMany('App\Models\Matches', 'winner', 'id');
+    }
+    public function matchesLose()
+    {
+        return $this->hasMany('App\Models\Matches', 'loser', 'id');
     }
 
     /**

@@ -95,8 +95,8 @@ class UsersController extends Controller
         
     }
 /*
+----------------------------leaderboard--------------------------------------
  */
-// User.php model
 
 
     public function leaderBoardWins(Request $request){
@@ -107,6 +107,38 @@ class UsersController extends Controller
     
         return response()->json($users);
     }
+/*
+----------------------------totalcredits won / lose----------------------------------------
+ */
+    public function totalCreditsWon(Request $request,string $id)
+    {
+        $user = User::where('id', $id)->first(['id', 'fullName as name']);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        $totalCreditsWon = $user->matchesWon()->sum('creditsbetted');
+        $result = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'total_credits_won' => $totalCreditsWon
+        ];
+        return response()->json($result);
 
+    }
+    public function totalCreditsLose(Request $request,string $id)
+    {
+        $user = User::where('id', $id)->first(['id', 'fullName as name']);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        $totalCreditsWon = $user->matchesLose()->sum('creditsbetted');
+        $result = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'total_credits_won' => $totalCreditsWon
+        ];
+        return response()->json($result);
+
+    }
 
 }
