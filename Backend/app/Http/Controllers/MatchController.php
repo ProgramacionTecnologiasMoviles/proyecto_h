@@ -9,7 +9,7 @@ class MatchController extends Controller
     public function index(Request $request)
     {
         $match=Matches::all();
-        return response()->json($bank);
+        return response()->json($match);
     }
 
     /**
@@ -35,15 +35,15 @@ class MatchController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $bank=Matches::find($id);
+        $match=Matches::find($id);
         $match->hostUser =$request->hostUser;
         $match->guessUser =$request->guessUser;
-        $match->creditsbetted =$request->guess_user;
+        $match->creditsbetted =$request->creditsbetted;
         $match->game =$request->game;
         $match->winner =$request->winner;
         $match->loser =$request->loser;
         $match->score =$request->score;
-        $bank->save();
+        $match->save();
 
         return response()->json("El Registro de la partida se ha actualizado exitosamente",200);
 
