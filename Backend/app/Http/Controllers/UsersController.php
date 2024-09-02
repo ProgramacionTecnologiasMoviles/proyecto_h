@@ -63,6 +63,9 @@ class UsersController extends Controller
         return response()->json("El Usuario se ha eliminado exitosamente",201);
     }
 
+    /**
+     * 
+     */
     public function updateCredits(Request $request){
         $data=$request->validate([
             'user_winner'=> 'required|exists:users,id',
@@ -88,6 +91,18 @@ class UsersController extends Controller
         }
             
         
+    }
+/*
+ */
+// User.php model
+
+
+    public function leaderBoardWins(Request $request){
+        $users = User::withCount('matchesWon')
+        ->orderBy('matches_won_count', 'desc')
+        ->get(['id', 'fullname as name']);
+    
+        return response()->json($users);
     }
 
 
