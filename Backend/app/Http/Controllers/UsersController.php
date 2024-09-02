@@ -45,9 +45,9 @@ class UsersController extends Controller
     {
         $user=User::find($id);
         $user->username =$request->username;
-        $user->email =$request->email;
+        $user->fullname =$request->fullname;
         $user->password =$request->password;
-        $user->UserType =$request->UserType;
+        $user->age =$request->age;
         $user->remember_token=$request->remember_token;
         $user->save();
         return response()->json("El Usuario se ha actualizado exitosamente",201);
