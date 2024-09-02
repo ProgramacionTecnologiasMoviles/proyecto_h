@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -60,6 +61,33 @@ class UsersController extends Controller
         $user=User::find($id);
         $user->delete();
         return response()->json("El Usuario se ha eliminado exitosamente",201);
+    }
+
+    public function updateCredits(Request $request){
+        $data=$request->validate([
+            'user_winner'=> 'required|exists:users,id',
+            'user_loser'=> 'required|exists:users,id',
+            'credits_bet'=> 'required|integer'
+        ]);
+        try{
+            DB::beginTransaction();
+            ## Encontramos los ususarios
+            $winner=User::findorFail($data['user_winner']);
+            $loser=User::findorFail($data['user_loser']);
+            ## Actualizamos los creditos 
+            $winner->credits=$winner->credits + $data['credits_bet'];
+            $loser->credits=$loser->credits - $data['credits_bet'];
+            $winner->save();
+            $loser->save();
+            DB::commit();
+            return response()->json(['message' => 'Los creditos de los usuarios se han actualizado'], 200);
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['error' => 'Error al actualizar loss creditos de los usuarios'], 500);
+            
+        }
+            
+        
     }
 
 

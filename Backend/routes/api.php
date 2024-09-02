@@ -34,6 +34,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::post('/users', [UsersController::class,'store']);
 Route::put('/users/{id}', [UsersController::class,'update'])->middleware('auth:sanctum');
+Route::post('/update_Credits', [UsersController::class, 'updateCredits']);
+
 Route::delete('/users/{id}', [UsersController::class,'destroy'])->middleware('auth:sanctum');
 #-------------------------------------BANK ACCOUNT----------------------------------#
 Route::resource('/bank_accounts', bankAccountController::class);
