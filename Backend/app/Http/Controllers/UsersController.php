@@ -21,6 +21,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        
         $user=new User();
         $user->username =$request->username;
         $user->fullname =$request->fullname;
@@ -64,7 +65,8 @@ class UsersController extends Controller
     }
 
     /**
-     * 
+
+
      */
     public function updateCredits(Request $request){
         $data=$request->validate([

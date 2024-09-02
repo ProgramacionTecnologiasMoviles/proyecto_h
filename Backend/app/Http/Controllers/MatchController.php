@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Matches;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MatchController extends Controller
@@ -17,6 +18,11 @@ class MatchController extends Controller
      */
     public function store(Request $request)
     {
+        $hostUser = User::find($request->hostUser);
+        $guessUser = User::find($request->guessUser);
+        if($hostUser->credits < $request->creditsbetted  || $guessUser->credits < $request->creditsbetted ){
+            return response()->json("Ambos jugadores deben tener la cantidad de creditos suficientes", 500);
+        }
         $match=new Matches();
         $match->hostUser =$request->hostUser;
         $match->guessUser =$request->guessUser;
