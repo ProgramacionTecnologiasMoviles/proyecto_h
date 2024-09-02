@@ -12,8 +12,8 @@
 
 ```
 $ docker compose build
-$ docker exec -it backend-web-1 php artisan migrate
 $ docker composer up -d
+$ docker exec -it backend-web-1 php artisan migrate
 ```
 
 3. El servidor esta corriendo en el puerto 8000
