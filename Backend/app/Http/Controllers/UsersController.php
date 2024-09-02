@@ -98,7 +98,8 @@ class UsersController extends Controller
 
 
     public function leaderBoardWins(Request $request){
-        $users = User::withCount('matchesWon')
+        $users = User::select(['id', 'fullname','credits'])
+        ->withCount('matchesWon')
         ->orderBy('matches_won_count', 'desc')
         ->get(['id', 'fullname as name']);
     
