@@ -46,7 +46,9 @@ Route::get('/leaderboard', [UsersController::class, 'leaderBoardWins']);
 #-------------------------------------BANK ACCOUNT----------------------------------#
 Route::resource('/bank_accounts', bankAccountController::class)->middleware('auth:sanctum');
 #-------------------------------------GAME----------------------------------#
-Route::resource('/Game', GameController::class);
-#-------------------------------------GAME----------------------------------#
+Route::resource('/game', GameController::class);
+#-------------------------------------MATCH----------------------------------#
 Route::resource('/match', MatchController::class)->middleware('auth:sanctum');
+Route::post('/create_match', [MatchController::class, 'create_match'])->middleware('auth:sanctum');
+Route::post('/join_match', [MatchController::class, 'join_match'])->middleware('auth:sanctum');
 

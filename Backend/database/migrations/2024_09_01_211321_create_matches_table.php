@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("hostUser");
             $table->foreign("hostUser")->references("id")->on("users");
-            $table->unsignedBigInteger("guessUser");
+            $table->unsignedBigInteger("guessUser")->nullable();
             $table->foreign("guessUser")->references("id")->on("users");
             $table->integer("creditsbetted");
             $table->unsignedBigInteger("game");

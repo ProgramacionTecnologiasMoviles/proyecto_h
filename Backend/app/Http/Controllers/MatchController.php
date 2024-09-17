@@ -20,6 +20,9 @@ class MatchController extends Controller
     {
         $hostUser = User::find($request->hostUser);
         $guessUser = User::find($request->guessUser);
+        if ($guessUser === null) {
+            return response()->json(['error' => 'Usuario visitante no encontrado'], 404);
+        }
         if($hostUser->credits < $request->creditsbetted  || $guessUser->credits < $request->creditsbetted ){
             return response()->json("Ambos jugadores deben tener la cantidad de creditos suficientes", 500);
         }
@@ -34,6 +37,34 @@ class MatchController extends Controller
         $match->save();
 
         return response()->json(['id' => $match->id], 201);
+    }
+
+    public function create_match(Request $request)
+    {
+        $hostUser = User::find($request->hostUser);
+        $match=new Matches();
+        $match->hostUser =$request->hostUser;
+        $match->creditsbetted =$request->creditsbetted;
+        $match->game =$request->game;
+        $match->save();
+        $match_id = sprintf('%04d', $match->id);
+
+        return response()->json(['id' =>$match_id], 201);
+    }
+
+    public function join_match(Request $request)
+    {
+        $hostUser = User::find($request->hostUser);
+        $guessUser = User::find($request->guessUser);
+        
+        if($hostUser->credits < $request->creditsbetted  || $guessUser->credits < $request->creditsbetted ){
+            return response()->json("Ambos jugadores deben tener la cantidad de creditos suficientes", 401);
+        }
+        $match=Matches::find($request->id);
+        $match->guessUser =$request->guessUser;
+        $match->save();
+
+        return response()->json(['el jugador se ha unido a la partida correctamente  '], 201);
     }
 
     /**
