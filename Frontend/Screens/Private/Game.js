@@ -48,24 +48,29 @@ export default function Game({ route }) {
 
   // Once the game starts
   useEffect(() => {
-    console.log(hostPlayer);
     if (hostPlayer) {
       moveTheMap();
     } else {
       ws.onmessage = (event) => {
-        x.value = Number(event.data);
+        const data = JSON.parse(event.data);
+
+        // Access the 'x' property after parsing
+        console.log(data.firstPlayerPos);
+        x.value = Number(data.x);
+        pipeOffset.value = Number(data.pipeOffset);
+        secondBirdY.value = Number(data.firstPlayerPos);
       };
     }
   }, []);
 
-  const sendXValueToWebSocket = (value) => {
-    // ws.send(
-    //   JSON.stringify({
-    //     x: value.toString(),
-    //     pipeOffset: pipeOffset.value.toString(),
-    //   })
-    // );
-    ws.send(value.toString());
+  const sendValueToWebSocket = (value) => {
+    ws.send(
+      JSON.stringify({
+        x: value.toString(),
+        pipeOffset: pipeOffset.value.toString(),
+        firstPlayerPos: birdY.value.toString(),
+      })
+    );
   };
 
   if (hostPlayer) {
@@ -73,7 +78,7 @@ export default function Game({ route }) {
       () => x.value,
       (currentX, previousX) => {
         if (currentX !== previousX) {
-          runOnJS(sendXValueToWebSocket)(currentX);
+          runOnJS(sendValueToWebSocket)(currentX);
         }
       },
       [x]
@@ -94,6 +99,7 @@ export default function Game({ route }) {
     x: width / 4,
   };
   const birdY = useSharedValue(height / 3);
+  const secondBirdY = useSharedValue(height / 3);
   const birdCenterX = useDerivedValue(() => birdPos.x + 32);
   const birdCenterY = useDerivedValue(() => birdY.value + 24);
   const birdVelocity = useSharedValue(200);
@@ -126,7 +132,6 @@ export default function Game({ route }) {
       const middle = birdPos.x;
 
       if (currentValue < -100 && previousValue > -100 && hostPlayer) {
-        console.log(currentValue, previousValue);
         pipeOffset.value = Math.random() * 400 - 200;
       }
       if (
@@ -253,6 +258,17 @@ export default function Game({ route }) {
               image={bird}
               x={birdPos.x}
               y={birdY}
+              width={64}
+              height={48}
+            />
+          </Group>
+
+          {/* Second bird */}
+          <Group transform={birdTransform} origin={birdOrigin}>
+            <Image
+              image={secondBird}
+              x={birdPos.x}
+              y={secondBirdY}
               width={64}
               height={48}
             />
