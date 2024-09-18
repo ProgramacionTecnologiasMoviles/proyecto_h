@@ -26,7 +26,7 @@ import {
   GestureDetector,
   Gesture,
 } from "react-native-gesture-handler";
-import { useWebSocket } from "../contexts/WebSocketContext";
+import { useWebSocket } from "../../contexts/WebSocketContext";
 
 const GRAVITY = 1000;
 const JUMP_FORCE = -400;
@@ -179,11 +179,13 @@ export default function Game({ route }) {
     }
   );
 
-  const background = useImage(require("../assets/sprites/background-day.png"));
-  const bird = useImage(require("../assets/sprites/yellowbird-upflap.png"));
-  const pipe = useImage(require("../assets/sprites/pipe-green.png"));
-  const pipeup = useImage(require("../assets/sprites/pipe-green-up.png"));
-  const base = useImage(require("../assets/sprites/base.png"));
+  const background = useImage(
+    require("../../assets/sprites/background-day.png")
+  );
+  const bird = useImage(require("../../assets/sprites/yellowbird-upflap.png"));
+  const pipe = useImage(require("../../assets/sprites/pipe-green.png"));
+  const pipeup = useImage(require("../../assets/sprites/pipe-green-up.png"));
+  const base = useImage(require("../../assets/sprites/base.png"));
 
   const birdOrigin = useDerivedValue(() => {
     return { x: width / 4 + 32, y: birdY.value + 24 };

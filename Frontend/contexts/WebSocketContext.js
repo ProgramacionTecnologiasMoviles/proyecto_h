@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
 const WebSocketContext = createContext();
+const AuthContext = createContext();
 
 const WebSocketProvider = ({ children }) => {
   const [ws, setWs] = useState(null);
@@ -11,7 +12,7 @@ const WebSocketProvider = ({ children }) => {
       ws.close();
     }
 
-    const newWs = new WebSocket(`ws://192.168.115.42:8000/ws/${gameId}`);
+    const newWs = new WebSocket(`ws://192.168.54.42:3000/ws/${gameId}`);
 
     newWs.onopen = () => {
       console.log("WebSocket connected with gameId:", gameId);
@@ -41,4 +42,4 @@ const useWebSocket = () => {
   return context;
 };
 
-export { useWebSocket, WebSocketProvider };
+export { useWebSocket, WebSocketProvider, AuthContext };

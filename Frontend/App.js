@@ -1,10 +1,10 @@
-import Routes from "./Routes";
+import RoutesPub from "./RoutesPub";
 import { WebSocketProvider } from "./contexts/WebSocketContext";
 
 const App = () => {
   return (
     <WebSocketProvider>
-      <Routes />
+      <RoutesPub />
     </WebSocketProvider>
   );
 };

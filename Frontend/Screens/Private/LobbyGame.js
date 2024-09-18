@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
-import { useWebSocket } from "../contexts/WebSocketContext";
+import { useWebSocket } from "../../contexts/WebSocketContext";
 
 export default function LobbyGame({ route, navigation }) {
   const { gameId, hostPlayer } = route.params;
@@ -52,7 +52,7 @@ export default function LobbyGame({ route, navigation }) {
           <Text style={styles.playerName}>Player 1</Text>
           <Image
             style={styles.imagePlayer}
-            source={require("../assets/sprites/bird.png")}
+            source={require("../../assets/sprites/bird.png")}
           ></Image>
           <Entypo name="check" size={30} color="green" style={styles.check} />
         </View>
@@ -62,7 +62,7 @@ export default function LobbyGame({ route, navigation }) {
               <Text style={styles.playerName}>Player 1</Text>
               <Image
                 style={styles.imagePlayer}
-                source={require("../assets/sprites/bird-red.png")}
+                source={require("../../assets/sprites/bird-red.png")}
               ></Image>
               <Entypo
                 name="check"

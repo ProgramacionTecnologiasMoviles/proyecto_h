@@ -1,19 +1,19 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "./Screens/Home";
+import Home from "./Screens/Private/Home";
 import { AntDesign } from "@expo/vector-icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import Game from "./Screens/Game";
+import Game from "./Screens/Private/Game";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LobbyGame from "./Screens/LobbyGame";
+import LobbyGame from "./Screens/Private/LobbyGame";
 import { WebSocketProvider } from "./contexts/WebSocketContext";
 
 const Tab = createBottomTabNavigator();
 
 export default function Routes() {
   return (
-    <NavigationContainer>
+    <NavigationContainer independent={true}>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,

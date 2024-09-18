@@ -7,7 +7,7 @@ import {
   TextInput,
 } from "react-native";
 import React from "react";
-import useCreateGame from "../hooks/useCreateGame";
+import useCreateGame from "../../hooks/useCreateGame";
 
 export default function Home({ navigation }) {
   const [number, onChangeNumber] = React.useState("");
@@ -29,14 +29,14 @@ export default function Home({ navigation }) {
       <View style={styles.gameContainer}>
         <View style={styles.imageShadow}>
           <Image
-            source={require("../assets/flappybirdlogo.png")}
+            source={require("../../assets/flappybirdlogo.png")}
             style={styles.gameImage}
           ></Image>
         </View>
       </View>
       <View style={styles.playContainer}>
         <Image
-          source={require("../assets/playButtonImage.png")}
+          source={require("../../assets/playButtonImage.png")}
           style={styles.playButtonImage}
         ></Image>
         <Pressable title="" onPress={handlePlay} style={styles.playButton} />

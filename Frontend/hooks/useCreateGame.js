@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "http://172.20.10.3:8000/api";
+const url = "http://192.168.54.42:8000/api";
 const useCreateGame = async () => {
   try {
     data = { hostUser: 3, creditsbetted: 10, game: 1 };
