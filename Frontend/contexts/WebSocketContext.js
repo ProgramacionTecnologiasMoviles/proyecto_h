@@ -11,7 +11,7 @@ const WebSocketProvider = ({ children }) => {
       ws.close();
     }
 
-    const newWs = new WebSocket(`ws://192.168.54.42:3000/ws/${gameId}`);
+    const newWs = new WebSocket(`ws://192.168.113.42:3000/ws/${gameId}`);
 
     newWs.onopen = () => {
       console.log("WebSocket connected with gameId:", gameId);

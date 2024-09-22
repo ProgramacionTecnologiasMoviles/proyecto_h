@@ -48,37 +48,39 @@ export default function Game({ route }) {
 
   // Once the game starts
   useEffect(() => {
-    if (hostPlayer) {
-      moveTheMap();
-    } else {
-      ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
+    moveTheMap();
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
 
-        // Access the 'x' property after parsing
-        console.log(data.firstPlayerPos);
-        x.value = Number(data.x);
-        pipeOffset.value = Number(data.pipeOffset);
-        secondBirdY.value = Number(data.firstPlayerPos);
-      };
-    }
+      if (hostPlayer) {
+        if (data.secondPlayerTab) {
+          secondBirdVelocity.value = JUMP_FORCE;
+        }
+      } else {
+        if (data.pipeOffset) {
+          pipeOffset.value = Number(data.pipeOffset);
+        }
+        if (data.firstPlayerTab) {
+          secondBirdVelocity.value = JUMP_FORCE;
+        }
+      }
+    };
   }, []);
 
-  const sendValueToWebSocket = (value) => {
+  const sendValueToWebSocket = (variable_name, value) => {
     ws.send(
       JSON.stringify({
-        x: value.toString(),
-        pipeOffset: pipeOffset.value.toString(),
-        firstPlayerPos: birdY.value.toString(),
+        [variable_name]: value.toString(),
       })
     );
   };
 
   if (hostPlayer) {
     useAnimatedReaction(
-      () => x.value,
+      () => pipeOffset.value,
       (currentX, previousX) => {
         if (currentX !== previousX) {
-          runOnJS(sendValueToWebSocket)(currentX);
+          runOnJS(sendValueToWebSocket)("pipeOffset", pipeOffset.value);
         }
       },
       [x]
@@ -103,6 +105,7 @@ export default function Game({ route }) {
   const birdCenterX = useDerivedValue(() => birdPos.x + 32);
   const birdCenterY = useDerivedValue(() => birdY.value + 24);
   const birdVelocity = useSharedValue(200);
+  const secondBirdVelocity = useSharedValue(200);
 
   const obstacles = useDerivedValue(() => {
     const allObstacles = [];
@@ -155,26 +158,26 @@ export default function Game({ route }) {
   };
 
   // Colission detection
-  useAnimatedReaction(
-    () => birdY.value,
-    (currentValue, previousValue) => {
-      // ground collision detection
-      if (currentValue > height - 150 || currentValue < 0) {
-        gameOver.value = true;
-      }
+  // useAnimatedReaction(
+  //   () => birdY.value,
+  //   (currentValue, previousValue) => {
+  //     // ground collision detection
+  //     if (currentValue > height - 150 || currentValue < 0) {
+  //       gameOver.value = true;
+  //     }
 
-      const isColliding = obstacles.value.some((rect) =>
-        isPointCollidingWithRect(
-          { x: birdCenterX.value, y: birdCenterY.value },
-          rect
-        )
-      );
+  //     const isColliding = obstacles.value.some((rect) =>
+  //       isPointCollidingWithRect(
+  //         { x: birdCenterX.value, y: birdCenterY.value },
+  //         rect
+  //       )
+  //     );
 
-      if (isColliding) {
-        gameOver.value = true;
-      }
-    }
-  );
+  //     if (isColliding) {
+  //       gameOver.value = true;
+  //     }
+  //   }
+  // );
   useAnimatedReaction(
     () => gameOver.value,
     (currentValue, previousValue) => {
@@ -195,16 +198,29 @@ export default function Game({ route }) {
     return { x: width / 4 + 32, y: birdY.value + 24 };
   });
 
+  const secondBirdOrigin = useDerivedValue(() => {
+    return { x: width / 4 + 32, y: secondBirdY.value + 24 };
+  });
+
   useFrameCallback(({ timeSincePreviousFrame: dt }) => {
     if (!dt || gameOver.value) {
       return;
     }
     birdY.value = birdY.value + (birdVelocity.value * dt) / 1000;
     birdVelocity.value = birdVelocity.value + (GRAVITY * dt) / 1000;
+
+    secondBirdY.value =
+      secondBirdY.value + (secondBirdVelocity.value * dt) / 1000;
+    secondBirdVelocity.value = secondBirdVelocity.value + (GRAVITY * dt) / 1000;
   });
 
   const gesture = Gesture.Tap().onStart(() => {
     birdVelocity.value = JUMP_FORCE;
+    if (hostPlayer) {
+      runOnJS(sendValueToWebSocket)("firstPlayerTab", true);
+    } else {
+      runOnJS(sendValueToWebSocket)("secondPlayerTab", true);
+    }
   });
 
   const birdTransform = useDerivedValue(() => {
@@ -212,6 +228,19 @@ export default function Game({ route }) {
       {
         rotate: interpolate(
           birdVelocity.value,
+          [-500, 500],
+          [-0.5, 0.5],
+          Extrapolation.CLAMP
+        ),
+      },
+    ];
+  });
+
+  const secondBirdTransform = useDerivedValue(() => {
+    return [
+      {
+        rotate: interpolate(
+          secondBirdVelocity.value,
           [-500, 500],
           [-0.5, 0.5],
           Extrapolation.CLAMP
@@ -263,7 +292,7 @@ export default function Game({ route }) {
           </Group>
 
           {/* Second bird */}
-          <Group transform={birdTransform} origin={birdOrigin}>
+          <Group transform={secondBirdTransform} origin={secondBirdOrigin}>
             <Image
               image={secondBird}
               x={birdPos.x}
