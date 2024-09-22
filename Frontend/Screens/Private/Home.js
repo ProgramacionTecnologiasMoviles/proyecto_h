@@ -6,10 +6,12 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
-import React from "react";
-import useCreateGame from "../../hooks/useCreateGame";
+import React, { useContext } from "react";
+import { AuthContext } from "../../contexts/WebSocketContext";
+import { create_match } from "../../services/GamseService";
 
 export default function Home({ navigation }) {
+  const { user, setUser } = useContext(AuthContext);
   const [number, onChangeNumber] = React.useState("");
 
   const handleSubmit = () => {
@@ -17,13 +19,18 @@ export default function Home({ navigation }) {
   };
 
   const handlePlay = async () => {
-    const gameId = await useCreateGame();
+    credentials = {
+      hostUser: user.id,
+      game: 1,
+      creditsbetted: 10,
+    };
+    const gameId = await create_match(credentials);
     navigation.navigate("LobbyGame", { gameId, hostPlayer: true });
   };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Hi User!</Text>
+        <Text style={styles.title}>Hi {user.username}</Text>
         <Text style={styles.title}>Coins - 0</Text>
       </View>
       <View style={styles.gameContainer}>

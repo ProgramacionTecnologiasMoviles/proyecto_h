@@ -56,8 +56,3 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
         manager.disconnect(websocket)
         if len(manager.active_connections) == 0:
             del game_connections[game_id]
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}

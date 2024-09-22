@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import useCreateGame from "../../hooks/useCreateGame";
 import axios from "../../hooks/axios";
 import FormTextField from "../../components/FormField";
 import { useState } from "react";

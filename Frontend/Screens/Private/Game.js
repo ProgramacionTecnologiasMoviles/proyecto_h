@@ -28,10 +28,10 @@ import {
 } from "react-native-gesture-handler";
 import { useWebSocket } from "../../contexts/WebSocketContext";
 
-const GRAVITY = 1000;
+const GRAVITY = 800;
 const JUMP_FORCE = -400;
 const PIPE_WIDTH = 104;
-const PIPE_HEIGTH = 640;
+const PIPE_HEIGTH = 0;
 
 export default function Game({ route }) {
   const { ws } = useWebSocket();
@@ -42,33 +42,49 @@ export default function Game({ route }) {
   const pipeOffset = useSharedValue(0);
   const topPipeY = useDerivedValue(() => pipeOffset.value - 320);
   const bottomPipeY = useDerivedValue(() => height - 320 + pipeOffset.value);
-
+  const birdY = useSharedValue(height / 3);
   const x = useSharedValue(width);
   const gameOver = useSharedValue(false);
+  let tap = 0;
 
-  // Once the game starts
   useEffect(() => {
     if (hostPlayer) {
       moveTheMap();
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log("posicion del segundo", data.secondPlayerPos);
+        secondBirdY.value = Number(data.secondPlayerPos);
+      };
     } else {
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
-
-        // Access the 'x' property after parsing
-        console.log(data.firstPlayerPos);
         x.value = Number(data.x);
-        pipeOffset.value = Number(data.pipeOffset);
+        // pipeOffset.value = Number(data.pipeOffset);
         secondBirdY.value = Number(data.firstPlayerPos);
       };
     }
   }, []);
 
-  const sendValueToWebSocket = (value) => {
+  const sendValueToWebSocketHost = (value) => {
     ws.send(
       JSON.stringify({
         x: value.toString(),
-        pipeOffset: pipeOffset.value.toString(),
+        // pipeOffset: pipeOffset.value.toString(),
         firstPlayerPos: birdY.value.toString(),
+      })
+    );
+  };
+  const sendValueToWebSocketGuess = () => {
+    ws.send(
+      JSON.stringify({
+        secondPlayerPos: birdY.value.toString(),
+      })
+    );
+  };
+  const sendTapToWebSocket = () => {
+    ws.send(
+      JSON.stringify({
+        tap: true,
       })
     );
   };
@@ -78,11 +94,17 @@ export default function Game({ route }) {
       () => x.value,
       (currentX, previousX) => {
         if (currentX !== previousX) {
-          runOnJS(sendValueToWebSocket)(currentX);
+          // runOnJS(sendValueToWebSocketHost)(currentX);
         }
       },
       [x]
     );
+  } else {
+    const gesture = Gesture.Tap().onStart(() => {
+      birdVelocity.value = JUMP_FORCE;
+
+      ws.send("tap");
+    });
   }
 
   const moveTheMap = () => {
@@ -98,7 +120,6 @@ export default function Game({ route }) {
   const birdPos = {
     x: width / 4,
   };
-  const birdY = useSharedValue(height / 3);
   const secondBirdY = useSharedValue(height / 3);
   const birdCenterX = useDerivedValue(() => birdPos.x + 32);
   const birdCenterY = useDerivedValue(() => birdY.value + 24);
@@ -188,6 +209,9 @@ export default function Game({ route }) {
     require("../../assets/sprites/background-day.png")
   );
   const bird = useImage(require("../../assets/sprites/yellowbird-upflap.png"));
+  const secondBird = useImage(
+    require("../../assets/sprites/redbird-upflap.png")
+  );
   const pipe = useImage(require("../../assets/sprites/pipe-green.png"));
   const pipeup = useImage(require("../../assets/sprites/pipe-green-up.png"));
   const base = useImage(require("../../assets/sprites/base.png"));
@@ -203,10 +227,14 @@ export default function Game({ route }) {
     birdY.value = birdY.value + (birdVelocity.value * dt) / 1000;
     birdVelocity.value = birdVelocity.value + (GRAVITY * dt) / 1000;
   });
-
-  const gesture = Gesture.Tap().onStart(() => {
-    birdVelocity.value = JUMP_FORCE;
-  });
+  const useTapGesture = () => {
+    const gesture_2 = Gesture.Tap().onStart(() => {
+      birdVelocity.value = JUMP_FORCE;
+      runOnJS(sendTapToWebSocket)();
+    });
+    return gesture_2;
+  };
+  const gesture = useTapGesture();
 
   const birdTransform = useDerivedValue(() => {
     return [
@@ -221,12 +249,6 @@ export default function Game({ route }) {
     ];
   });
 
-  // const fontStyle = {
-  // fontSize: 40,
-  // fontWeight: "bold",
-  // };
-
-  // const font = matchFont(fontStyle);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={gesture}>

@@ -7,12 +7,11 @@ const WebSocketProvider = ({ children }) => {
   const [ws, setWs] = useState(null);
 
   const initializeWebSocket = (gameId) => {
-    // In case websocket already exits
     if (ws) {
       ws.close();
     }
 
-    const newWs = new WebSocket(`ws://192.168.54.42:3000/ws/${gameId}`);
+    const newWs = new WebSocket(`ws://192.168.1.24:3000/ws/${gameId}`);
 
     newWs.onopen = () => {
       console.log("WebSocket connected with gameId:", gameId);
