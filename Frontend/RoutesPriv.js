@@ -6,7 +6,7 @@ import { AntDesign } from "@expo/vector-icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Game from "./Screens/Private/Game";
 import LobbyGame from "./Screens/Private/LobbyGame";
-// import Dashboard from "./Screens/Private/Dashboard";
+import Dashboard from "./Screens/Private/Dashboard";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Score from "./Screens/Private/Score";
 
@@ -56,7 +56,7 @@ export default function Routes() {
             ),
           }}
         />
-        {/* <Tab.Screen
+        <Tab.Screen
           name="Dashboard"
           component={Dashboard}
           options={{
@@ -64,7 +64,7 @@ export default function Routes() {
               <FontAwesome name="user" size={24} color="white" />
             ),
           }}
-        /> */}
+        />
         <Tab.Screen
           name="Score"
           component={Score}
