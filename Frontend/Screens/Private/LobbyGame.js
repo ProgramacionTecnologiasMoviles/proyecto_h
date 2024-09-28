@@ -7,7 +7,7 @@ import {
   Pressable,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useWebSocket } from "../../contexts/WebSocketContext";
 
