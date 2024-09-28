@@ -1,12 +1,5 @@
-import {
-  Canvas,
-  useImage,
-  Image,
-  Group,
-  Circle,
-  Text,
-} from "@shopify/react-native-skia";
-import { useEffect, useState } from "react";
+import { Canvas, useImage, Image, Group } from "@shopify/react-native-skia";
+import { useEffect } from "react";
 import {
   useSharedValue,
   Easing,
@@ -19,7 +12,6 @@ import {
   Extrapolation,
   useAnimatedReaction,
   runOnJS,
-  cancelAnimation,
 } from "react-native-reanimated";
 import {
   GestureHandlerRootView,
@@ -28,6 +20,7 @@ import {
 } from "react-native-gesture-handler";
 import { useWebSocket } from "../../contexts/WebSocketContext";
 import { useNavigation } from "@react-navigation/native";
+import { useWindowDimensions } from "react-native";
 import { AuthContext } from "../../contexts/WebSocketContext";
 import { useContext } from "react";
 
@@ -40,17 +33,17 @@ export default function Game({ route }) {
   const navigation = useNavigation();
   const { ws } = useWebSocket();
   const { hostPlayer } = route.params;
-  const { width, height } = { width: 390, height: 838 };
-  const [score, setScore] = useState(0);
-  const [loser, setLoser] = useState(false);
+  const { width, height } = useWindowDimensions();
   const { user } = useContext(AuthContext);
 
+  // Variable in time
   const pipeOffset = useSharedValue(0);
   const topPipeY = useDerivedValue(() => pipeOffset.value - 320);
   const bottomPipeY = useDerivedValue(() => height - 320 + pipeOffset.value);
   const birdY = useSharedValue(height / 3);
   const x = useSharedValue(width);
 
+  // Listen to socket and move the map
   useEffect(() => {
     moveTheMap();
     ws.onmessage = (event) => {
@@ -78,6 +71,16 @@ export default function Game({ route }) {
     };
   }, []);
 
+  const moveTheMap = () => {
+    x.value = withRepeat(
+      withSequence(
+        withTiming(-150, { duration: 2000, easing: Easing.linear }),
+        withTiming(width, { duration: 0 })
+      ),
+      -1
+    );
+  };
+
   const sendValueToWebSocket = (variable_name, value) => {
     ws.send(
       JSON.stringify({
@@ -86,6 +89,7 @@ export default function Game({ route }) {
     );
   };
 
+  // Send the change of the pipeOffset
   if (hostPlayer) {
     useAnimatedReaction(
       () => pipeOffset.value,
@@ -98,16 +102,7 @@ export default function Game({ route }) {
     );
   }
 
-  const moveTheMap = () => {
-    x.value = withRepeat(
-      withSequence(
-        withTiming(-150, { duration: 2000, easing: Easing.linear }),
-        withTiming(width, { duration: 0 })
-      ),
-      -1
-    );
-  };
-
+  // Position of the bird
   const birdPos = {
     x: width / 4,
   };
@@ -137,25 +132,6 @@ export default function Game({ route }) {
 
     return allObstacles;
   });
-
-  // Scoring system
-  useAnimatedReaction(
-    () => x.value,
-    (currentValue, previousValue) => {
-      const middle = birdPos.x;
-
-      if (currentValue < -110 && previousValue > -110 && hostPlayer) {
-        pipeOffset.value = Math.random() * 400 - 200;
-      }
-      if (
-        currentValue != previousValue &&
-        currentValue <= middle &&
-        previousValue > middle
-      ) {
-        runOnJS(setScore)(score + 1);
-      }
-    }
-  );
 
   const isPointCollidingWithRect = (point, rect) => {
     "worklet";
@@ -189,6 +165,7 @@ export default function Game({ route }) {
     }
   );
 
+  // Images
   const background = useImage(
     require("../../assets/sprites/background-day.png")
   );
@@ -220,6 +197,7 @@ export default function Game({ route }) {
     secondBirdVelocity.value = secondBirdVelocity.value + (GRAVITY * dt) / 1000;
   });
 
+  // Send the new location to socket
   const gesture = Gesture.Tap().onStart(() => {
     birdVelocity.value = JUMP_FORCE;
     if (hostPlayer) {
@@ -229,6 +207,7 @@ export default function Game({ route }) {
     }
   });
 
+  // Bird rotation
   const birdTransform = useDerivedValue(() => {
     return [
       {
