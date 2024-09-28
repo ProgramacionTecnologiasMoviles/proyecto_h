@@ -9,6 +9,7 @@ import { AuthContext } from "./contexts/WebSocketContext";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./RoutesPriv";
 
+
 const Stack = createNativeStackNavigator();
 
 export default function RoutesPub() {

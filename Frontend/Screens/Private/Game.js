@@ -28,25 +28,23 @@ import {
 } from "react-native-gesture-handler";
 import { useWebSocket } from "../../contexts/WebSocketContext";
 
-const GRAVITY = 800;
+const GRAVITY = 1000;
 const JUMP_FORCE = -400;
 const PIPE_WIDTH = 104;
-const PIPE_HEIGTH = 0;
+const PIPE_HEIGTH = 40;
 
 export default function Game({ route }) {
   const { ws } = useWebSocket();
   const { hostPlayer } = route.params;
   const { width, height } = useWindowDimensions();
+  // const { width, height } = { width: 360, height: 720 };
   const [score, setScore] = useState(0);
-
   const pipeOffset = useSharedValue(0);
   const topPipeY = useDerivedValue(() => pipeOffset.value - 320);
   const bottomPipeY = useDerivedValue(() => height - 320 + pipeOffset.value);
   const birdY = useSharedValue(height / 3);
   const x = useSharedValue(width);
   const gameOver = useSharedValue(false);
-  let tap = 0;
-
   useEffect(() => {
     moveTheMap();
     ws.onmessage = (event) => {
@@ -54,7 +52,9 @@ export default function Game({ route }) {
 
       if (hostPlayer) {
         if (data.secondPlayerTab) {
+          //agrega un valor extra para compensar gravedad
           secondBirdVelocity.value = JUMP_FORCE;
+          console.log(data.coordinates_guess_player);
         }
       } else {
         if (data.pipeOffset) {
@@ -62,29 +62,22 @@ export default function Game({ route }) {
         }
         if (data.firstPlayerTab) {
           secondBirdVelocity.value = JUMP_FORCE;
+          console.log(data.coordinates_host_player);
         }
       }
     };
   }, []);
 
-  const sendValueToWebSocket = (variable_name, value) => {
+  const sendValueToWebSocket = (
+    variable_name,
+    value,
+    guess_position,
+    coordinates
+  ) => {
     ws.send(
       JSON.stringify({
         [variable_name]: value.toString(),
-      })
-    );
-  };
-  const sendValueToWebSocketGuess = () => {
-    ws.send(
-      JSON.stringify({
-        secondPlayerPos: birdY.value.toString(),
-      })
-    );
-  };
-  const sendTapToWebSocket = () => {
-    ws.send(
-      JSON.stringify({
-        tap: true,
+        [guess_position]: coordinates,
       })
     );
   };
@@ -102,7 +95,6 @@ export default function Game({ route }) {
   } else {
     const gesture = Gesture.Tap().onStart(() => {
       birdVelocity.value = JUMP_FORCE;
-
       ws.send("tap");
     });
   }
@@ -120,15 +112,14 @@ export default function Game({ route }) {
   const birdPos = {
     x: width / 4,
   };
-  const secondBirdY = useSharedValue(height / 3);
+  const secondBirdY = useSharedValue((height / 3)-200);
   const birdCenterX = useDerivedValue(() => birdPos.x + 32);
   const birdCenterY = useDerivedValue(() => birdY.value + 24);
-  const birdVelocity = useSharedValue(200);
-  const secondBirdVelocity = useSharedValue(200);
+  const birdVelocity = useSharedValue(1);
+  const secondBirdVelocity = useSharedValue(1);
 
   const obstacles = useDerivedValue(() => {
     const allObstacles = [];
-    // Bottom pipe
     allObstacles.push({
       x: x.value,
       y: bottomPipeY.value,
@@ -136,7 +127,6 @@ export default function Game({ route }) {
       w: PIPE_WIDTH,
     });
 
-    // Top pipe
     allObstacles.push({
       x: x.value,
       y: topPipeY.value,
@@ -147,7 +137,6 @@ export default function Game({ route }) {
     return allObstacles;
   });
 
-  // Scoring system
   useAnimatedReaction(
     () => x.value,
     (currentValue, previousValue) => {
@@ -178,7 +167,7 @@ export default function Game({ route }) {
 
   // Colission detection
   // useAnimatedReaction(
-  //   () => birdY.value,
+  //   () => birdY.value,r
   //   (currentValue, previousValue) => {
   //     // ground collision detection
   //     if (currentValue > height - 150 || currentValue < 0) {
@@ -222,7 +211,7 @@ export default function Game({ route }) {
   });
 
   const secondBirdOrigin = useDerivedValue(() => {
-    return { x: width / 4 + 32, y: secondBirdY.value + 24 };
+    return { x: width / 4 + 32, y: secondBirdY.value -24};
   });
 
   useFrameCallback(({ timeSincePreviousFrame: dt }) => {
@@ -240,9 +229,19 @@ export default function Game({ route }) {
   const gesture = Gesture.Tap().onStart(() => {
     birdVelocity.value = JUMP_FORCE;
     if (hostPlayer) {
-      runOnJS(sendValueToWebSocket)("firstPlayerTab", true);
+      runOnJS(sendValueToWebSocket)(
+        "firstPlayerTab",
+        true,
+        "coordinates_host_player",
+        birdY
+      );
     } else {
-      runOnJS(sendValueToWebSocket)("secondPlayerTab", true);
+      runOnJS(sendValueToWebSocket)(
+        "secondPlayerTab",
+        true,
+        "coordinates_guess_player",
+        birdY
+      );
     }
   });
 
@@ -272,12 +271,6 @@ export default function Game({ route }) {
     ];
   });
 
-  // const fontStyle = {
-  // fontSize: 40,
-  // fontWeight: "bold",
-  // };
-
-  // const font = matchFont(fontStyle);
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={gesture}>

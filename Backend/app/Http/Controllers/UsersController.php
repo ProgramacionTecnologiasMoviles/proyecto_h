@@ -46,8 +46,12 @@ class UsersController extends Controller
         $user=User::find($id);
         $user->username =$request->username;
         $user->fullname =$request->fullname;
+        $user->email =$request->email;
         $user->password =$request->password;
         $user->age =$request->age;
+        $user->national_id=$request->national_id;
+        $user->credits=$request->credits;
+        $user->bankAccount_id=$request->bankAccount_id;
         $user->remember_token=$request->remember_token;
         $user->save();
         return response()->json("El Usuario se ha actualizado exitosamente",201);
@@ -76,10 +80,8 @@ class UsersController extends Controller
         ]);
         try{
             DB::beginTransaction();
-            ## Encontramos los ususarios
             $winner=User::findorFail($data['user_winner']);
             $loser=User::findorFail($data['user_loser']);
-            ## Actualizamos los creditos 
             $winner->credits=$winner->credits + $data['credits_bet'];
             $loser->credits=$loser->credits - $data['credits_bet'];
             $winner->save();

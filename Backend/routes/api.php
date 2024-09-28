@@ -7,6 +7,7 @@ use App\Http\Controllers\bankAccountController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\MatchController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\PayPalPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,11 +45,16 @@ Route::get('/users/{id}/total_credits_lose', [UsersController::class, 'totalCred
 Route::get('/leaderboard', [UsersController::class, 'leaderBoardWins']);
 
 #-------------------------------------BANK ACCOUNT----------------------------------#
-Route::resource('/bank_accounts', bankAccountController::class)->middleware('auth:sanctum');
+Route::post('/bank_accounts', [bankAccountController::class])->middleware('auth:sanctum');
+Route::patch('/bank_accounts', bankAccountController::class)->middleware('auth:sanctum');
 #-------------------------------------GAME----------------------------------#
 Route::resource('/game', GameController::class);
 #-------------------------------------MATCH----------------------------------#
 Route::resource('/match', MatchController::class)->middleware('auth:sanctum');
 Route::post('/create_match', [MatchController::class, 'create_match']);
 Route::post('/join_match', [MatchController::class, 'join_match']);
+
+#-----------------------------------PAYPAL/CONNECTIONS-----------------------#endregion
+Route::post('/access_token', [PayPalPaymentController::class, 'access_token']);
+Route::post('/create_order', [PayPalPaymentController::class, 'create_order']);
 

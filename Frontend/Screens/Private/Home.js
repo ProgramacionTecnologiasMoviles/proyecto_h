@@ -9,6 +9,7 @@ import {
 import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/WebSocketContext";
 import { create_match } from "../../services/GamseService";
+import PaypalComponent from "../../components/PaypalComponent";
 
 export default function Home({ navigation }) {
   const { user, setUser } = useContext(AuthContext);
@@ -59,6 +60,9 @@ export default function Home({ navigation }) {
           onSubmitEditing={handleSubmit}
         />
       </View>
+      <View style={styles.Paypal}>
+        <PaypalComponent ammount={"1.00"} />
+      </View>
     </View>
   );
 }
@@ -68,6 +72,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F9C527",
     alignItems: "center",
+  },
+  Paypal: {
+    margin: 15,
   },
   header: {
     flexDirection: "row",
