@@ -58,9 +58,22 @@ class UsersController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function addcredits(Request $request)
+    {
+        $validatedData = $request->validate([
+            'credits' => 'required|integer|min:0',
+            'id' => 'required|string|max:255'
+        ]);
+        $user = User::find($validatedData['id']);
+        if (!$user) {
+            return response()->json(['error' => 'Usuario no encontrado'], 404);
+        }
+        $user->credits += $validatedData['credits']; 
+        $user->save(); 
+        return response()->json("El Usuario ha actualizado sus créditos exitosamente.", 201);
+    }
+    
+
     public function destroy(string $id)
     {
         $user=User::find($id);
@@ -72,7 +85,7 @@ class UsersController extends Controller
 
 
      */
-    public function updateCredits(Request $request){
+    public function update_credits(Request $request){
         $data=$request->validate([
             'user_winner'=> 'required|exists:users,id',
             'user_loser'=> 'required|exists:users,id',
