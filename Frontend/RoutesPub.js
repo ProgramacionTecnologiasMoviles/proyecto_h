@@ -8,6 +8,7 @@ import { loadUser } from "./services/AuthService";
 import { AuthContext } from "./contexts/WebSocketContext";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./RoutesPriv";
+import Landing from "./Screens/Public/Landing";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,7 +41,10 @@ export default function RoutesPub() {
         ) : (
           <>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Landing" component={Landing} />
+
               <Stack.Screen name="Login" component={Login} />
+
               <Stack.Screen name="Register" component={Register} />
             </Stack.Navigator>
           </>
