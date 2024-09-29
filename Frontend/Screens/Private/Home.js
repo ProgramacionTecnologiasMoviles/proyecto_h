@@ -12,9 +12,8 @@ import { create_match } from "../../services/GamseService";
 import PaypalComponent from "../../components/PaypalComponent";
 
 export default function Home({ navigation }) {
-  const { user, setUser } = useContext(AuthContext);
   const [number, onChangeNumber] = React.useState("");
-
+  const { user, setUser } = useContext(AuthContext);
   const handleSubmit = () => {
     navigation.navigate("LobbyGame", { gameId: number, hostPlayer: false });
   };
@@ -61,7 +60,7 @@ export default function Home({ navigation }) {
         />
       </View>
       <View style={styles.Paypal}>
-        <PaypalComponent ammount={"1.00"} />
+        <PaypalComponent ammount={1} />
       </View>
     </View>
   );

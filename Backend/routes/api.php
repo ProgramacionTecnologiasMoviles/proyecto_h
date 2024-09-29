@@ -18,10 +18,8 @@ use App\Http\Controllers\Api\AuthController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::post('/adding_credits', [UsersController::class,'addcredits']);
 
 Route::post('/login', [AuthController::class,'iniciarsesion']);
-
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/users', function (Request $request) {
         return $request->user();
@@ -37,13 +35,12 @@ Route::post('/users', [UsersController::class,'store']);
 Route::put('/users/{id}', [UsersController::class,'update'])->middleware('auth:sanctum');
 #----------------------------CREDITS---------------------------------#
 Route::post('/update_credit', [UsersController::class, 'update_credits'])->middleware('auth:sanctum');
+Route::post('/adding_credits', [UsersController::class,'addcredits'])->middleware('auth:sanctum');
 Route::get('/totalcreditswon', [UsersController::class, 'totalCreditsWon'])->middleware('auth:sanctum');
 Route::get('/users/{id}/total_credits_won', [UsersController::class, 'totalCreditsWon'])->middleware('auth:sanctum');
 Route::get('/users/{id}/total_credits_lose', [UsersController::class, 'totalCreditsLose'])->middleware('auth:sanctum');
 #----------------------------LEADERBOARD---------------------------------#
-
 Route::get('/leaderboard', [UsersController::class, 'leaderBoardWins']);
-
 #-------------------------------------BANK ACCOUNT----------------------------------#
 Route::resource('/bank_accounts', bankAccountController::class)->middleware('auth:sanctum');
 #-------------------------------------GAME----------------------------------#

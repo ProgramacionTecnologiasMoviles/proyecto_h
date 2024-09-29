@@ -60,15 +60,11 @@ class UsersController extends Controller
 
     public function addcredits(Request $request)
     {
-        $validatedData = $request->validate([
-            'credits' => 'required|integer|min:0',
-            'id' => 'required|string|max:255'
-        ]);
-        $user = User::find($validatedData['id']);
+        $user = User::find($request->id);
         if (!$user) {
             return response()->json(['error' => 'Usuario no encontrado'], 404);
         }
-        $user->credits += $validatedData['credits']; 
+        $user->credits += $request->credits; 
         $user->save(); 
         return response()->json("El Usuario ha actualizado sus créditos exitosamente.", 201);
     }
@@ -87,16 +83,16 @@ class UsersController extends Controller
      */
     public function update_credits(Request $request){
         $data=$request->validate([
-            'user_winner'=> 'required|exists:users,id',
-            'user_loser'=> 'required|exists:users,id',
+            'user_winner'=> 'required|integer',
+            'user_loser'=> 'required|integer',
             'credits_bet'=> 'required|integer'
         ]);
         try{
             DB::beginTransaction();
-            $winner=User::findorFail($data['user_winner']);
-            $loser=User::findorFail($data['user_loser']);
-            $winner->credits=$winner->credits + $data['credits_bet'];
-            $loser->credits=$loser->credits - $data['credits_bet'];
+            $winner=User::findorFail($request['user_winner']);
+            $loser=User::findorFail($request['user_loser']);
+            $winner->credits=$winner->credits + $request['credits_bet'];
+            $loser->credits=$loser->credits - $request['credits_bet'];
             $winner->save();
             $loser->save();
             DB::commit();

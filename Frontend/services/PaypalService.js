@@ -2,6 +2,7 @@ import axios from "../../Frontend/hooks/axios";
 import React, { useContext } from "react";
 import { getToken, setToken } from "./TokenService";
 import { AuthContext } from "../contexts/WebSocketContext";
+
 export async function bank_information(info) {
   const token = await getToken();
   data_store = {
@@ -17,15 +18,14 @@ export async function bank_information(info) {
   console.log(data);
   return data;
 }
-export async function update_credits(credits) {
-  const { user, setUser } = useContext(AuthContext);
+export async function add_credits(amount, user) {
   const token = await getToken();
-  console.log(credits);
   data_store = {
-    account_number: credits.purchase_units.ammount.value,
+    id: user.id,
+    credits: amount,
   };
   console.log(data_store);
-  const { data } = await axios.put("/bank_accounts", credits, {
+  const { data } = await axios.post("/adding_credits", data_store, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
