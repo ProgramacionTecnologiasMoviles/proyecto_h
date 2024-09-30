@@ -7,7 +7,10 @@ import { useState, useEffect } from "react";
 import { loadUser } from "./services/AuthService";
 import { AuthContext } from "./contexts/WebSocketContext";
 import { NavigationContainer } from "@react-navigation/native";
-import Routes from "./RoutesPriv";
+import TabNavigator from "./RoutesPriv";
+import LobbyGame from "./Screens/Private/LobbyGame";
+import Score from "./Screens/Private/Score";
+import Game from "./Screens/Private/Game";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,9 +37,12 @@ export default function RoutesPub() {
     <AuthContext.Provider value={{ user, setUser }}>
       <NavigationContainer>
         {user ? (
-          <>
-            <Routes />
-          </>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="MainTabs" component={TabNavigator} />
+            <Stack.Screen name="LobbyGame" component={LobbyGame} />
+            <Stack.Screen name="Game" component={Game} />
+            <Stack.Screen name="Score" component={Score} />
+          </Stack.Navigator>
         ) : (
           <>
             <Stack.Navigator screenOptions={{ headerShown: false }}>

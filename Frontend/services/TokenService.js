@@ -19,8 +19,6 @@ let token = null;
 //   return token;
 // }
 
-
-
 export async function setToken(newToken) {
   token = newToken;
   if (token !== null) {
