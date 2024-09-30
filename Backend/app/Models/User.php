@@ -11,6 +11,14 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    public function matchesWon()
+    {
+        return $this->hasMany('App\Models\Matches', 'winner', 'id');
+    }
+    public function matchesLose()
+    {
+        return $this->hasMany('App\Models\Matches', 'loser', 'id');
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -42,4 +50,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
 }

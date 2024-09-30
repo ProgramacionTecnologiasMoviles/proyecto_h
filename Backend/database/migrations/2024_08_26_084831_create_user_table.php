@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("password");
             $table->string("national_id");
             $table->integer("age");
-            $table->unsignedBigInteger("bankaccount_id");
+            $table->unsignedBigInteger("bankaccount_id")->nullable();
             $table->foreign("bankaccount_id")->references("id")->on("bank_accounts");
             $table->integer("credits");
             $table->rememberToken();

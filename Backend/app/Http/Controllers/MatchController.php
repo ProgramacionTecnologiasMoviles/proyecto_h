@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Matched;
+use App\Models\Matches;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MatchController extends Controller
 {
     public function index(Request $request)
     {
-        $match=Matched::all();
-        return response()->json($bank);
+        $match=Matches::all();
+        return response()->json($match);
     }
 
     /**
@@ -17,17 +18,53 @@ class MatchController extends Controller
      */
     public function store(Request $request)
     {
-        $match=new Matched();
+        $hostUser = User::find($request->hostUser);
+        $guessUser = User::find($request->guessUser);
+        if ($guessUser === null) {
+            return response()->json(['error' => 'Usuario visitante no encontrado'], 404);
+        }
+        if($hostUser->credits < $request->creditsbetted  || $guessUser->credits < $request->creditsbetted ){
+            return response()->json("Ambos jugadores deben tener la cantidad de creditos suficientes", 500);
+        }
+        $match=new Matches();
         $match->hostUser =$request->hostUser;
         $match->guessUser =$request->guessUser;
-        $match->creditsbetted =$request->guess_user;
+        $match->creditsbetted =$request->creditsbetted;
         $match->game =$request->game;
         $match->winner =$request->winner;
         $match->loser =$request->loser;
         $match->score =$request->score;
-        $bank->save();
+        $match->save();
 
-        return response()->json("El registro de la partida se ha agregado exitosamente",201);
+        return response()->json(['id' => $match->id], 201);
+    }
+
+    public function create_match(Request $request)
+    {
+        $hostUser = User::find($request->hostUser);
+        $match=new Matches();
+        $match->hostUser =$request->hostUser;
+        $match->creditsbetted =$request->creditsbetted;
+        $match->game =$request->game;
+        $match->save();
+        $match_id = sprintf('%04d', $match->id);
+
+        return response()->json(['id' =>$match_id], 201);
+    }
+
+    public function join_match(Request $request)
+    {
+        $hostUser = User::find($request->hostUser);
+        $guessUser = User::find($request->guessUser);
+        
+        if($hostUser->credits < $request->creditsbetted  || $guessUser->credits < $request->creditsbetted ){
+            return response()->json("Ambos jugadores deben tener la cantidad de creditos suficientes", 401);
+        }
+        $match=Matches::find($request->id);
+        $match->guessUser =$request->guessUser;
+        $match->save();
+
+        return response()->json(['el jugador se ha unido a la partida correctamente  '], 201);
     }
 
     /**
@@ -35,15 +72,15 @@ class MatchController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $bank=Matched::find($id);
+        $match=Matches::find($id);
         $match->hostUser =$request->hostUser;
         $match->guessUser =$request->guessUser;
-        $match->creditsbetted =$request->guess_user;
+        $match->creditsbetted =$request->creditsbetted;
         $match->game =$request->game;
         $match->winner =$request->winner;
         $match->loser =$request->loser;
         $match->score =$request->score;
-        $bank->save();
+        $match->save();
 
         return response()->json("El Registro de la partida se ha actualizado exitosamente",200);
 
@@ -54,7 +91,7 @@ class MatchController extends Controller
      */
     public function destroy(string $id)
     {
-        $bank=Matched::find($id);
+        $bank=Matches::find($id);
         $bank->delete();
         return response()->json("El Registro de la partida se ha eliminado exitosamente",200);
     }
