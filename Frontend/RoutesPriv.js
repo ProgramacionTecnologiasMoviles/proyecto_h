@@ -5,9 +5,10 @@ import Home from "./Screens/Private/Home";
 import { AntDesign } from "@expo/vector-icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Game from "./Screens/Private/Game";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LobbyGame from "./Screens/Private/LobbyGame";
-import { WebSocketProvider } from "./contexts/WebSocketContext";
+import Dashboard from "./Screens/Private/Dashboard";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Score from "./Screens/Private/Score";
 
 const Tab = createBottomTabNavigator();
 
@@ -52,6 +53,24 @@ export default function Routes() {
           options={{
             tabBarIcon: ({}) => (
               <FontAwesome5 name="gamepad" size={24} color="white" />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Dashboard"
+          component={Dashboard}
+          options={{
+            tabBarIcon: ({}) => (
+              <FontAwesome name="user" size={24} color="white" />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Score"
+          component={Score}
+          options={{
+            tabBarIcon: ({}) => (
+              <FontAwesome name="user" size={24} color="white" />
             ),
           }}
         />
