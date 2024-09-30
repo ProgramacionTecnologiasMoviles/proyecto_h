@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./Screens/Private/Home";
 import { AntDesign } from "@expo/vector-icons";
-// import Dashboard from "./Screens/Private/Dashboard";
+import Dashboard from "./Screens/Private/Dashboard";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import User from "./Screens/Private/User";
 
@@ -32,15 +32,15 @@ export default function TabNavigator() {
           tabBarIcon: ({}) => <AntDesign name="home" size={24} color="white" />,
         }}
       />
-      {/* <Tab.Screen
-          name="Dashboard"
-          component={Dashboard}
-          options={{
-            tabBarIcon: ({}) => (
-              <FontAwesome name="user" size={24} color="white" />
-            ),
-          }}
-        /> */}
+      <Tab.Screen
+        name="Dashboard"
+        component={Dashboard}
+        options={{
+          tabBarIcon: ({}) => (
+            <AntDesign name="barschart" size={24} color="white" />
+          ),
+        }}
+      />
 
       <Tab.Screen
         name="User"

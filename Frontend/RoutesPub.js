@@ -1,6 +1,4 @@
-import { Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Login from "./Screens/Public/Login";
 import Register from "./Screens/Public/Register";
 import { useState, useEffect } from "react";
@@ -11,6 +9,7 @@ import TabNavigator from "./RoutesPriv";
 import LobbyGame from "./Screens/Private/LobbyGame";
 import Score from "./Screens/Private/Score";
 import Game from "./Screens/Private/Game";
+import Landing from "./Screens/Public/Landing";
 
 const Stack = createNativeStackNavigator();
 
@@ -47,9 +46,7 @@ export default function RoutesPub() {
           <>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="Landing" component={Landing} />
-
               <Stack.Screen name="Login" component={Login} />
-
               <Stack.Screen name="Register" component={Register} />
             </Stack.Navigator>
           </>
