@@ -1,7 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 
 let token = null;
-//------- funcion para guardar token en local storage para web -------------//
+// //------- funcion para guardar token en local storage para web -------------//
 // export function setToken(newToken) {
 //   token = newToken;
 //   if (token !== null) {

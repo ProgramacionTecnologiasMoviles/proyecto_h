@@ -7,19 +7,20 @@ import {
   Pressable,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
-import { useWebSocket } from "../../contexts/WebSocketContext";
+import { AuthContext, useWebSocket } from "../../contexts/WebSocketContext";
 
 export default function LobbyGame({ route, navigation }) {
   const { gameId, hostPlayer } = route.params;
+  const { user } = useContext(AuthContext);
   const [player2Connected, setIsPlayer2Connected] = useState(false);
   const { ws, initializeWebSocket } = useWebSocket();
 
   useEffect(() => {
     try {
       if (gameId) {
-        initializeWebSocket(gameId);
+        initializeWebSocket(gameId, user);
       }
     } catch (error) {
       console.error(error);
@@ -33,7 +34,7 @@ export default function LobbyGame({ route, navigation }) {
       if (event.data == gameId) {
         setIsPlayer2Connected(true);
       } else if (player2Connected && event.data == "start") {
-        navigation.navigate("Game", { hostPlayer: hostPlayer });
+        navigation.navigate("Game", { hostPlayer: hostPlayer, gameId: gameId });
       }
     };
   }, [ws, player2Connected]);
