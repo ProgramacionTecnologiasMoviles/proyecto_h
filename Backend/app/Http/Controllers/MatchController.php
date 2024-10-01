@@ -51,7 +51,20 @@ class MatchController extends Controller
 
         return response()->json(['id' =>$match_id], 201);
     }
-
+    public function update_match(Request $request)
+    {
+        $match = Matches::find($request->id);
+        $match->hostUser =$request->hostUser;
+        $match->guessUser =$request->guessUser;
+        $match->creditsbetted =$request->creditsbetted;
+        $match->game =$request->game;
+        $match->winner =$request->winner;
+        $match->loser =$request->loser;
+        $match->score =$request->score;
+        $match->save();
+        return response()->json("Se ha actualizado la partida con la informacion nueva ", 201);
+    }
+    
     public function join_match(Request $request)
     {
         $hostUser = User::find($request->hostUser);

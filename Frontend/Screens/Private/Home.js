@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/WebSocketContext";
-import { create_match } from "../../services/GamseService";
+import { create_match } from "../../services/GameService";
 
 export default function Home({ navigation }) {
   const { user, setUser } = useContext(AuthContext);

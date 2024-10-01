@@ -5,16 +5,17 @@ const AuthContext = createContext();
 
 const WebSocketProvider = ({ children }) => {
   const [ws, setWs] = useState(null);
-
-  const initializeWebSocket = (gameId) => {
+  const initializeWebSocket = (gameId, user) => {
     if (ws) {
       ws.close();
     }
 
-    const newWs = new WebSocket(`ws://192.168.1.24:3000/ws/${gameId}`);
+    const newWs = new WebSocket(
+      `ws://192.168.224.1:3000/ws/${gameId}/${user.id}`
+    );
 
     newWs.onopen = () => {
-      console.log("WebSocket connected with gameId:", gameId);
+      console.log("WebSocket connected with gameId:", gameId, user.id);
     };
 
     newWs.onclose = () => {

@@ -49,6 +49,7 @@ Route::resource('/bank_accounts', bankAccountController::class)->middleware('aut
 Route::resource('/game', GameController::class);
 #-------------------------------------MATCH----------------------------------#
 Route::resource('/match', MatchController::class)->middleware('auth:sanctum');
+Route::put('/match', [MatchController::class, 'update_match'])->middleware('auth:sanctum');
 Route::post('/create_match', [MatchController::class, 'create_match']);
 Route::post('/join_match', [MatchController::class, 'join_match']);
 
