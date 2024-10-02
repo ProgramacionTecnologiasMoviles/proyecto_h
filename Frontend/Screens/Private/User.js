@@ -1,79 +1,19 @@
 import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
 import { useEditDataUser } from "../../hooks/useEditDataUser";
+import { WebView } from "react-native-webview";
+import { SafeAreaView } from "react-native";
 
 export default function User() {
   const { user, editing, setEditing, handleEdit } = useEditDataUser();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{user.username}</Text>
-        <Text style={styles.title}>Coins - {user.credits}</Text>
-      </View>
-      <View style={styles.userDataContainer}>
-        <Text style={styles.label}>Fullname</Text>
-        <TextInput
-          style={styles.input}
-          value={user.fullname}
-          onChangeText={(text) => setFullname(text)}
-          placeholderTextColor="#ccc"
-          editable={editing}
-        />
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          value={user.email}
-          onChangeText={(text) => setEmail(text)}
-          placeholderTextColor="#ccc"
-          editable={editing}
-        />
-        <View style={styles.creditsBox}>
-          <View style={styles.creditBox}>
-            <Text style={styles.titleCredits}> Credits Spend</Text>
-            <View style={styles.amountBox}>
-              <Text style={styles.amount}>1</Text>
-            </View>
-          </View>
-          <View style={styles.creditBox}>
-            <Text style={styles.titleCredits}> Credits available</Text>
-            <View style={styles.amountBox}>
-              <Text style={styles.amount}>{user.credits}</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.creditsBox}>
-          <View style={styles.creditBox}>
-            <Text style={styles.titleCredits}> Credits won</Text>
-            <View style={styles.amountBox}>
-              <Text style={styles.amount}>1</Text>
-            </View>
-          </View>
-          <View style={styles.creditBox}>
-            <Text style={styles.titleCredits}> Credits withdrawn</Text>
-            <View style={styles.amountBox}>
-              <Text style={styles.amount}>{user.credits}</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.buyCreditsBox}>
-          <Text style={styles.label}>Buy more credits</Text>
-          <Text>Aqui va el boton de Paypal</Text>
-        </View>
-
-        {editing ? (
-          <Pressable style={styles.button} onPress={handleEdit}>
-            <Text style={styles.buttonText}> Update </Text>
-          </Pressable>
-        ) : (
-          <Pressable style={styles.button} onPress={() => setEditing(true)}>
-            <Text style={styles.buttonText}> Edit Account </Text>
-          </Pressable>
-        )}
-
-        <Text style={styles.logout}>Logout</Text>
-      </View>
-    </View>
+    <SafeAreaView style={{ flex: 1, marginTop: 20 }}>
+      <WebView
+        source={{ uri: "http://192.168.20.51:8080/" }}
+        style={{ flex: 1 }}
+        setSupportMultipleWindows={false}
+      />
+    </SafeAreaView>
   );
 }
 
