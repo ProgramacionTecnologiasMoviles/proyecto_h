@@ -18,6 +18,20 @@ export async function fetchUserCreditsLost(userId) {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log(data);
+  return data;
+}
+
+export async function fetchLeaderBoard() {
+  const { data } = await axios.get("/leaderboard");
+  return data;
+}
+
+export async function fetchUserMatches() {
+  const token = await getToken();
+  const { data } = await axios.get(`/matches_history`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return data;
 }

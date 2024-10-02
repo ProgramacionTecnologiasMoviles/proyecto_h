@@ -2,23 +2,30 @@ import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import React from "react";
 import MatchBox from "../../components/dashboard/MatchBox";
 import { useFetchStatisticsUser } from "../../hooks/useFetchStatisticsUser";
+import LeaderboardBox from "../../components/dashboard/LeaderboardBox";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/WebSocketContext";
 
 export default function Dashboard() {
   const { userStatistics, loading } = useFetchStatisticsUser();
-  console.log(loading, userStatistics);
+  const { user } = useContext(AuthContext);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Dashboard</Text>
-        <Text style={styles.title}>Coins</Text>
+        <Text style={styles.title}>Coins - {user.credits}</Text>
       </View>
       {loading ? (
         <ActivityIndicator size="large" color="#000" />
       ) : (
-        <View style={styles.matchesContainer}>
-          <MatchBox title={"Wins"} amount={userStatistics.credits_won} />
-          <MatchBox title={"Loses"} amount={0} />
-        </View>
+        <>
+          <View style={styles.matchesContainer}>
+            <MatchBox title={"Wins"} amount={userStatistics.wins} />
+            <MatchBox title={"Losses"} amount={userStatistics.losses} />
+          </View>
+          <LeaderboardBox leaderboard={userStatistics.leaderboard} />
+        </>
       )}
     </View>
   );
@@ -41,7 +48,7 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 20,
     fontSize: 30,
-    fontWeight: "bold",
+    fontFamily: "Fredoka_700Bold",
   },
   matchesContainer: {
     flex: 1,
@@ -58,9 +65,5 @@ const styles = StyleSheet.create({
     width: "90%",
     padding: 20,
     marginBottom: 10,
-  },
-  matchText: {
-    fontSize: 20,
-    fontWeight: "bold",
   },
 });

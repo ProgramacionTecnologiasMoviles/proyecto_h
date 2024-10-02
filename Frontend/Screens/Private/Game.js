@@ -33,7 +33,7 @@ const PIPE_HEIGTH = 640;
 export default function Game({ route }) {
   const navigation = useNavigation();
   const { ws } = useWebSocket();
-  const { gameId,hostPlayer } = route.params;
+  const { gameId, hostPlayer } = route.params;
   const { width, height } = useWindowDimensions();
   const { user } = useContext(AuthContext);
   const pipeOffset = useSharedValue(0);
@@ -154,16 +154,16 @@ export default function Game({ route }) {
         runOnJS(sendValueToWebSocket)("gameOver", user.id);
       }
 
-      // const isColliding = obstacles.value.some((rect) =>
-      //   isPointCollidingWithRect(
-      //     { x: birdCenterX.value, y: birdCenterY.value },
-      //     rect
-      //   )
-      // );
+      const isColliding = obstacles.value.some((rect) =>
+        isPointCollidingWithRect(
+          { x: birdCenterX.value, y: birdCenterY.value },
+          rect
+        )
+      );
 
-      // if (isColliding) {
-      //   runOnJS(sendValueToWebSocket)("gameOver", user.id);
-      // }
+      if (isColliding) {
+        runOnJS(sendValueToWebSocket)("gameOver", user.id);
+      }
     }
   );
 

@@ -55,4 +55,4 @@ Route::put('/match', [MatchController::class, 'update_match'])->middleware('auth
 Route::patch('/match', [MatchController::class, 'add_player_match'])->middleware('auth:sanctum');
 Route::post('/create_match', [MatchController::class, 'create_match']);
 Route::post('/join_match', [MatchController::class, 'join_match']);
-
+Route::get('/matches_history', [UsersController:: class, 'matchesHistory'])->middleware('auth:sanctum');

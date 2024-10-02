@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -151,6 +151,17 @@ class UsersController extends Controller
         ];
         return response()->json($result);
 
+    }
+
+    public function matchesHistory(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        $wins = $user->matchesWon()->count();
+        $losses = $user->matchesLose()->count();
+        return response()->json(['wins' => $wins, 'losses' => $losses]);
     }
 
 }
