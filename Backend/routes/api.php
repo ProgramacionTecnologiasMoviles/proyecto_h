@@ -6,6 +6,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\bankAccountController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\MatchController;
+use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\Api\AuthController;
 
 /*
@@ -53,3 +54,8 @@ Route::put('/match', [MatchController::class, 'update_match'])->middleware('auth
 Route::post('/create_match', [MatchController::class, 'create_match']);
 Route::post('/join_match', [MatchController::class, 'join_match']);
 
+
+#-------------------------------------PAYPAL ROUTES----------------------------------#
+
+Route::post('/orders', [PaypalController::class, 'createOrder']);
+Route::post('/capture', [PaypalController::class, 'captureOrder']);
