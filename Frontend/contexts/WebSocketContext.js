@@ -11,7 +11,7 @@ const WebSocketProvider = ({ children }) => {
     }
 
     const newWs = new WebSocket(
-      `ws://192.168.224.1:3000/ws/${gameId}/${user.id}`
+      `ws://192.168.1.21:3000/ws/${gameId}/${user.id}`
     );
 
     newWs.onopen = () => {

@@ -33,6 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::post('/users', [UsersController::class,'store']);
+Route::post('/name_players', [UsersController::class,'name_players']);
 Route::put('/users/{id}', [UsersController::class,'update'])->middleware('auth:sanctum');
 #----------------------------CREDITS---------------------------------#
 Route::post('/update_Credits', [UsersController::class, 'updateCredits'])->middleware('auth:sanctum');
@@ -49,7 +50,9 @@ Route::resource('/bank_accounts', bankAccountController::class)->middleware('aut
 Route::resource('/game', GameController::class);
 #-------------------------------------MATCH----------------------------------#
 Route::resource('/match', MatchController::class)->middleware('auth:sanctum');
+Route::post('/match_info', [MatchController::class, 'match_info'])->middleware('auth:sanctum');
 Route::put('/match', [MatchController::class, 'update_match'])->middleware('auth:sanctum');
+Route::patch('/match', [MatchController::class, 'add_player_match'])->middleware('auth:sanctum');
 Route::post('/create_match', [MatchController::class, 'create_match']);
 Route::post('/join_match', [MatchController::class, 'join_match']);
 

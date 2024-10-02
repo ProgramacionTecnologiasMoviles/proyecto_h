@@ -14,9 +14,6 @@ export async function match_info(credentials) {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then((response) => {
-      console.log(response);
-    })
     .catch((error) => {
       console.log(error);
     });
@@ -37,4 +34,61 @@ export async function credits_transation(credentials) {
     .catch((error) => {
       console.log(error);
     });
+}
+export async function add_player_match(credentials) {
+  try {
+    const token = await getToken();
+    const response = await axios.patch("/match", credentials, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error adding player to match:", error);
+    throw error;
+  }
+}
+
+export async function players_id_match(id) {
+  try {
+    const token = await getToken();
+    const response = await axios.post("/match_info", id, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.data) {
+      return response.data;
+    } else {
+      throw new Error("No data");
+    }
+  } catch (error) {
+    console.error("Error fetching :", error);
+    throw error;
+  }
+}
+
+export async function get_name_player(id) {
+  try {
+    const token = await getToken();
+    const response = await axios.post("/name_players", id, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response.data);
+    if (response.data) {
+      return response.data;
+    } else {
+      throw new Error("No data");
+    }
+  } catch (error) {
+    console.error("Error fetching :", error);
+    throw error;
+  }
+}
+
+export function removeTrailingZeros(input) {
+  return parseInt(input, 10);
 }

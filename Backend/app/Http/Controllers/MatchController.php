@@ -98,10 +98,23 @@ class MatchController extends Controller
         return response()->json("El Registro de la partida se ha actualizado exitosamente",200);
 
     }
+    public function add_player_match(Request $request)
+    {
+        $match = Matches::findOrFail($request->id);
+        $match->update($request->only(['guessUser']));
+        return response()->json("se agrego el jugador al match",200);
+
+    }
+    public function match_info(Request $request)
+    {
+        $match = Matches::findOrFail($request->id);
+        return response()->json($match,200);
+
+    }
 
     /**
-     * Display the specified resource.
-     */
+
+    */
     public function destroy(string $id)
     {
         $bank=Matches::find($id);

@@ -65,9 +65,21 @@ class UsersController extends Controller
     }
 
     /**
+     * 
+     *
 
 
      */
+
+    public function name_players(Request $request){
+        $winner=User::find($request->winner_id);
+        $loser=User::find($request->loser_id);
+        $result = [
+            'winner_name' => $winner->username,
+            'loser_name' => $loser->username,
+        ];
+        return response()->json($result);
+    }
     public function updateCredits(Request $request){
         $data=$request->validate([
             'user_winner'=> 'required|exists:users,id',
