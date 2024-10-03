@@ -80,6 +80,13 @@ class UsersController extends Controller
         ];
         return response()->json($result);
     }
+    public function add_credits(Request $request)
+    {
+        $user=User::find($request->id);
+        $user->credits=$user->credits+$request->value;
+        $user->save();
+        return response()->json("El Usuario ha actualizado sus creditos",201);
+    }
     public function updateCredits(Request $request){
         $data=$request->validate([
             'user_winner'=> 'required|exists:users,id',
