@@ -1,5 +1,6 @@
 import axios from "../../Frontend/hooks/axios";
 import { getToken, setToken } from "./TokenService";
+import { destroyToken } from "./TokenService";
 
 export async function login(credentials) {
   const { data } = await axios.post("/login", credentials);
@@ -14,6 +15,10 @@ export async function loadUser(credentials) {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log(user);
   return user;
+}
+
+export async function logout(setUser) {
+  destroyToken();
+  await setUser(null);
 }

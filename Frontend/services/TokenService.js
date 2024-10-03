@@ -35,3 +35,10 @@ export async function getToken() {
   token = await SecureStore.getItemAsync("token");
   return token;
 }
+
+export async function destroyToken() {
+  token = await SecureStore.getItemAsync("token");
+  if (token) {
+    await SecureStore.deleteItemAsync("token");
+  }
+}

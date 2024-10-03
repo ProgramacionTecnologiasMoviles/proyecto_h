@@ -3,8 +3,8 @@ import {
   Text,
   StyleSheet,
   Image,
-  ImageBackground,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import React from "react";
 import { AuthContext } from "../../contexts/WebSocketContext";
@@ -119,53 +119,49 @@ export default function Score({ route, navigation }) {
   }, [winner, hostPlayer, loser, gameId]);
   console.log(info_game);
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {isLoser ? (
         <>
-          <View style={styles.podiumContainer}>
-            <Text style={styles.header}>GANADOR </Text>
-            <Text style={styles.header}>{w_name}</Text>
-
-            {/* Winner Trophy */}
-            <Image
-              source={require("../../assets/giff.gif")}
-              style={styles.trophy}
-            />
-
-            {/* Podium for Players */}
-            <View style={styles.playersContainer}>
-              <View style={[styles.playerPodium, styles.winnerPodium]}>
-                <Image
-                  source={require("../../assets/red_bird.png")}
-                  style={styles.bird}
-                />
-                <Text style={styles.playerText}>1° Lugar : {w_name}</Text>
-              </View>
-              <View style={styles.playerPodium}>
-                <Image
-                  source={require("../../assets/yellow_bird.png")}
-                  style={styles.bird}
-                />
-                <Text style={styles.playerText}>2° Lugar : {l_name}</Text>
-              </View>
-            </View>
-            <View style={styles.navBar}>
-              <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-                <Text style={styles.linkText}>Go to Home</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </>
-      ) : (
-        <View style={styles.podiumContainer}>
           <Text style={styles.header}>GANADOR </Text>
           <Text style={styles.header}>{w_name}</Text>
 
+          {/* Winner Trophy */}
           <Image
             source={require("../../assets/giff.gif")}
             style={styles.trophy}
           />
 
+          {/* Podium for Players */}
+          <View style={styles.playersContainer}>
+            <View>
+              <Image
+                source={require("../../assets/red_bird.png")}
+                style={styles.bird}
+              />
+              <Text style={styles.playerText}>1° Lugar : {w_name}</Text>
+            </View>
+            <View>
+              <Image
+                source={require("../../assets/yellow_bird.png")}
+                style={styles.bird}
+              />
+              <Text style={styles.playerText}>2° Lugar : {l_name}</Text>
+            </View>
+          </View>
+          <View style={styles.navBar}>
+            <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+              <Text style={styles.linkText}>Go to Home</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      ) : (
+        <>
+          <Text style={styles.header}>GANADOR </Text>
+          <Text style={styles.header}>{w_name}</Text>
+          <Image
+            source={require("../../assets/giff.gif")}
+            style={styles.trophy}
+          />
           <View style={styles.playersContainer}>
             <View style={[styles.playerPodium, styles.winnerPodium]}>
               <Image
@@ -187,15 +183,37 @@ export default function Score({ route, navigation }) {
               <Text style={styles.linkText}>Go to Home</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff3b4",
+    padding: 20,
+    alignItems: "center",
+  },
+  header: {
+    fontFamily: "Fredoka_700Bold",
+    fontSize: 52,
+    color: "#295F98",
+    marginTop: 15,
+  },
+  trophy: {
+    width: 300,
+    height: 300,
+  },
+  playersContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "100%",
+    paddingHorizontal: 10,
+  },
   navBar: {
-    marginTop: 140,
+    marginTop: 10,
     bottom: 10,
     width: "100%",
     alignItems: "center", // Center the link text horizontally
@@ -205,39 +223,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontFamily: "Fredoka_500Medium",
   },
-  container: {
-    flex: 1,
-    backgroundColor: "#fff3b4",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  header: {
-    fontFamily: "Fredoka_700Bold",
-    fontSize: 92,
-    color: "#295F98",
-    marginBottom: 20,
-  },
-  podiumContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  trophy: {
-    width: 380,
-    height: 380,
-    marginBottom: 30,
-  },
-  playersContainer: {
-    flexDirection: "row",
-    alignItems: "flex-end",
-    justifyContent: "center",
-  },
-  playerPodium: {
-    alignItems: "center",
-    marginHorizontal: 20,
-  },
-  winnerPodium: {
-    marginBottom: 40,
-  },
+
   bird: {
     width: 200,
     height: 200,
