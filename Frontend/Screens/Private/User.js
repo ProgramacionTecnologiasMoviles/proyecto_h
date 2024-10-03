@@ -96,13 +96,15 @@ export default function User() {
           </View>
           <View style={styles.buyCreditsBox}>
             <Text style={styles.label}>Buy more credits</Text>
-            <TouchableOpacity onPress={handlePress} style={styles.button}>
-              <Text style={styles.buttonText}>Pay with PayPal</Text>
+            <TouchableOpacity onPress={handlePress} style={styles.paypal}>
+              <Text style={styles.buttonTextPaypal}>Pay with PayPal</Text>
             </TouchableOpacity>
           </View>
-          <Pressable onPress={() => logout(setUser)} style={styles.button}>
-            <Text style={styles.buttonText}>Logout</Text>
-          </Pressable>
+          <View style={styles.logout}>
+            <Pressable onPress={() => logout(setUser)} style={styles.button}>
+              <Text style={styles.buttonText}>Logout</Text>
+            </Pressable>
+          </View>
         </View>
       )}
     </View>
@@ -112,7 +114,7 @@ export default function User() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "blue",
+    backgroundColor: "#2D9BF0",
   },
   header: {
     flexDirection: "row",
@@ -130,6 +132,7 @@ const styles = StyleSheet.create({
   userDataContainer: {
     width: "100%",
     paddingHorizontal: 20,
+    marginTop: 90,
   },
   label: {
     fontSize: 25,
@@ -191,7 +194,7 @@ const styles = StyleSheet.create({
     fontFamily: "Fredoka_600SemiBold",
   },
   buyCreditsBox: {
-    marginVertical: 20,
+    marginTop: 90,
     width: "100%",
     alignItems: "center",
   },
@@ -204,9 +207,26 @@ const styles = StyleSheet.create({
     marginTop: 50,
     borderRadius: 20,
   },
+  paypal: {
+    height: 60,
+    width: "50%",
+    backgroundColor: "#FCBB32",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 50,
+    borderRadius: 20,
+  },
+  buttonTextPaypal: {
+    color: "#0070BA",
+    fontSize: 30,
+    fontFamily: "Fredoka_600SemiBold",
+  },
   buttonText: {
     color: "white",
     fontSize: 20,
     fontFamily: "Fredoka_600SemiBold",
+  },
+  logout: {
+    alignItems: "center",
   },
 });
