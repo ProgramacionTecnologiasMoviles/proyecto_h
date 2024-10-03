@@ -10,12 +10,9 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import { AuthContext, useWebSocket } from "../../contexts/WebSocketContext";
-import { add_player_match } from "../../services/GameService";
-import { removeTrailingZeros } from "../../services/GameService";
 
 export default function LobbyGame({ route, navigation }) {
   const { gameId, hostPlayer } = route.params;
-  const [isPlayerAdded, setIsPlayerAdded] = useState(false);
   const { user } = useContext(AuthContext);
   const [player2Connected, setIsPlayer2Connected] = useState(false);
   const { ws, initializeWebSocket } = useWebSocket();
@@ -45,14 +42,6 @@ export default function LobbyGame({ route, navigation }) {
   const handleStart = () => {
     ws.send("start");
   };
-  if (!hostPlayer && !isPlayerAdded) {
-    credentials = {
-      id: removeTrailingZeros(gameId),
-      guessUser: user.id,
-    };
-    add_player_match(credentials);
-    setIsPlayerAdded(true);
-  }
 
   return (
     <View style={styles.container}>

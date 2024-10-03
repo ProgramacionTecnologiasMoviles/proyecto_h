@@ -36,18 +36,13 @@ export async function credits_transation(credentials) {
     });
 }
 export async function add_player_match(credentials) {
-  try {
-    const token = await getToken();
-    const response = await axios.patch("/match", credentials, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error adding player to match:", error);
-    throw error;
-  }
+  const token = await getToken();
+  const response = await axios.patch("/match", credentials, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
 }
 
 export async function players_id_match(id) {

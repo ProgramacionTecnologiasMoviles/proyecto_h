@@ -42,6 +42,9 @@ class MatchController extends Controller
     public function create_match(Request $request)
     {
         $hostUser = User::find($request->hostUser);
+        if($hostUser->credits < $request->creditsbetted ){
+            return response()->json("Creditos insuficientes", 500);
+        }
         $match=new Matches();
         $match->hostUser =$request->hostUser;
         $match->creditsbetted =$request->creditsbetted;
@@ -101,6 +104,11 @@ class MatchController extends Controller
     public function add_player_match(Request $request)
     {
         $match = Matches::findOrFail($request->id);
+        $guessUser = User::find($request->guessUser);
+
+        if ($match->creditsbetted > $guessUser->credits){
+            return response()->json("Creditos insuficientes", 500);
+        }
         $match->update($request->only(['guessUser']));
         return response()->json("se agrego el jugador al match",200);
 

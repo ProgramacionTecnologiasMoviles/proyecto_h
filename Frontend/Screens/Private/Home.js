@@ -6,60 +6,84 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/WebSocketContext";
-import { create_match } from "../../services/GameService";
+import { Modal } from "react-native";
+import ModalCredits from "../../components/home/ModalCredits";
+import { useJoinMatch } from "../../hooks/useJoinMatch";
 
 export default function Home({ navigation }) {
-  const { user, setUser } = useContext(AuthContext);
-  const [number, onChangeNumber] = React.useState("");
+  const { user } = useContext(AuthContext);
+  const [openModal, setOpenModal] = useState(false);
+  const [gameId, onChangeGameId] = useState("");
+  const [notEnoughCredits, setNotEnoughCredits] = useState(false);
 
-  const handleSubmit = () => {
-    navigation.navigate("LobbyGame", { gameId: number, hostPlayer: false });
+  const handleSubmit = async () => {
+    const { added } = await useJoinMatch(gameId, user.id);
+    if (added) {
+      navigation.navigate("LobbyGame", { gameId: gameId, hostPlayer: false });
+      setNotEnoughCredits(false);
+    } else {
+      setNotEnoughCredits(true);
+    }
   };
 
-  const handlePlay = async () => {
-    credentials = {
-      hostUser: user.id,
-      game: 1,
-      creditsbetted: 10,
-    };
-    const gameId = await create_match(credentials);
-    navigation.navigate("LobbyGame", { gameId, hostPlayer: true });
-  };
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Hi {user.username}</Text>
-        <Text style={styles.title}>Coins - 0</Text>
-      </View>
-      <View style={styles.gameContainer}>
-        <View style={styles.imageShadow}>
-          <Image
-            source={require("../../assets/flappybirdlogo.png")}
-            style={styles.gameImage}
-          ></Image>
+    <>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Hi {user.username}</Text>
+          <Text style={styles.title}>Coins - {user.credits}</Text>
         </View>
+        <View style={styles.gameContainer}>
+          <View style={styles.imageShadow}>
+            <Image
+              source={require("../../assets/flappybirdlogo.png")}
+              style={styles.gameImage}
+            ></Image>
+          </View>
+        </View>
+        <View style={styles.playContainer}>
+          <Image
+            source={require("../../assets/playButtonImage.png")}
+            style={styles.playButtonImage}
+          ></Image>
+          <Pressable
+            title=""
+            onPress={() => {
+              setOpenModal(true), setNotEnoughCredits(false);
+            }}
+            style={styles.playButton}
+          />
+        </View>
+        <View style={styles.joinGameContainer}>
+          <Text style={styles.joinGameText}>Join a Game</Text>
+          <TextInput
+            placeholder="Room code"
+            style={styles.joinGameInput}
+            keyboardType="numeric"
+            value={gameId}
+            onChangeText={onChangeGameId}
+            onSubmitEditing={handleSubmit}
+          />
+        </View>
+        {notEnoughCredits && (
+          <Text style={styles.missingCredits}>
+            You don't have enough credits to join the match
+          </Text>
+        )}
       </View>
-      <View style={styles.playContainer}>
-        <Image
-          source={require("../../assets/playButtonImage.png")}
-          style={styles.playButtonImage}
-        ></Image>
-        <Pressable title="" onPress={handlePlay} style={styles.playButton} />
-      </View>
-      <View style={styles.joinGameContainer}>
-        <Text style={styles.joinGameText}>Join a Game</Text>
-        <TextInput
-          placeholder="Room code"
-          style={styles.joinGameInput}
-          keyboardType="numeric"
-          value={number}
-          onChangeText={onChangeNumber}
-          onSubmitEditing={handleSubmit}
-        />
-      </View>
-    </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={openModal}
+        onRequestClose={() => {
+          setOpenModal(!openModal);
+        }}
+      >
+        <ModalCredits setOpenModal={setOpenModal} />
+      </Modal>
+    </>
   );
 }
 
@@ -80,7 +104,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     height: 100,
-    fontWeight: "bold",
+    fontFamily: "Fredoka_600SemiBold",
   },
   gameContainer: {
     width: "100%",
@@ -110,7 +134,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   playButtonImage: {
-    height: 100,
+    height: 80,
     width: 200,
   },
   playButton: {
@@ -122,13 +146,13 @@ const styles = StyleSheet.create({
   joinGameContainer: {
     flex: 1,
     alignItems: "center",
-    height: "40%",
+    height: "20%",
     width: "100%",
   },
   joinGameText: {
     marginTop: 20,
-    fontSize: 30,
-    fontWeight: "bold",
+    fontSize: 25,
+    fontFamily: "Fredoka_600SemiBold",
   },
   joinGameInput: {
     width: "70%",
@@ -138,5 +162,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 15,
     backgroundColor: "white",
+  },
+  missingCredits: {
+    marginBottom: 100,
+    fontSize: 20,
+    fontFamily: "Fredoka_500Medium",
+    textAlign: "center",
   },
 });

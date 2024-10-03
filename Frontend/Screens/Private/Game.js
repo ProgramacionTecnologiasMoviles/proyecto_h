@@ -12,7 +12,6 @@ import {
   Extrapolation,
   useAnimatedReaction,
   runOnJS,
-  getUseOfValueInStyleWarning,
 } from "react-native-reanimated";
 import {
   GestureHandlerRootView,
