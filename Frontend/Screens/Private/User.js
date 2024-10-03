@@ -59,6 +59,59 @@ export default function User() {
       <Pressable onPress={() => logout(setUser)} style={styles.button}>
         <Text style={styles.buttonText}>Logout</Text>
       </Pressable>
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  SafeAreaView,
+} from "react-native";
+import { WebView } from "react-native-webview";
+import React, { useState, useEffect } from "react";
+import { useRef } from "react";
+import { create_order } from "../../services/PaypalService";
+
+export default function User() {
+  const webviewRef = useRef(null);
+  const [url, setUrl] = useState(null);
+  const [id_order, setIdOrder] = useState(null);
+
+  credentials = {
+    currency: "USD",
+    value: "100",
+  };
+  const handlePress = async () => {
+    const response = await create_order(credentials);
+    console.log(response);
+    if (response) {
+      setUrl(response.url);
+    }
+  };
+  const handleNavigationStateChange = (navState) => {
+    const { url } = navState;
+    if (url && url.includes("PayerID")) {
+      setUrl(null);
+      webviewRef.current.stopLoading();
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      {url ? (
+        <WebView
+          source={{ uri: url }}
+          ref={webviewRef}
+          style={{ flex: 1 }}
+          setSupportMultipleWindows={false}
+          onNavigationStateChange={handleNavigationStateChange}
+        />
+      ) : (
+        <TouchableOpacity onPress={handlePress} style={styles.button}>
+          <Text style={styles.buttonText}>Pay with PayPal</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -66,8 +119,7 @@ export default function User() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#2D9BF0",
-    alignItems: "center",
+    backgroundColor: "blue",
   },
   header: {
     flexDirection: "row",

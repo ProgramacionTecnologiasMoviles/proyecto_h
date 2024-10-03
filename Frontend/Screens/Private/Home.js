@@ -12,6 +12,7 @@ import { Modal } from "react-native";
 import ModalCredits from "../../components/home/ModalCredits";
 import { useJoinMatch } from "../../hooks/useJoinMatch";
 
+import { create_match } from "../../services/GameService";
 export default function Home({ navigation }) {
   const { user } = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9C527",
     alignItems: "center",
   },
+
   header: {
     flexDirection: "row",
     width: "100%",
