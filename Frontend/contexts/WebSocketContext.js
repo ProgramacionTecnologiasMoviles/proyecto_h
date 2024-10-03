@@ -10,9 +10,8 @@ const WebSocketProvider = ({ children }) => {
       ws.close();
     }
 
-    const newWs = new WebSocket(
-      `ws://192.168.1.21:3000/ws/${gameId}/${user.id}`
-    );
+    const base_ip = process.env.EXPO_PUBLIC_BASE_IP;
+    const newWs = new WebSocket(`ws://${base_ip}:3000/ws/${gameId}/${user.id}`);
 
     newWs.onopen = () => {
       console.log("WebSocket connected with gameId:", gameId, user.id);

@@ -1,6 +1,9 @@
 import axiosLib from "axios";
+
+const base_ip = process.env.EXPO_PUBLIC_BASE_IP;
+
 const axios = axiosLib.create({
-  baseURL: "http://192.168.1.21:8000/api",
+  baseURL: `http://${base_ip}:8000/api`,
   headers: {
     Accept: "application/json",
   },
