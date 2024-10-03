@@ -10,26 +10,24 @@ import {
   TouchableOpacity,
   Pressable,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import { WebView } from "react-native-webview";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRef } from "react";
-import { create_order } from "../../services/PaypalService";
+import { capture_order, create_order } from "../../services/PaypalService";
 
 export default function User() {
   const { user, setUser } = useContext(AuthContext);
   const { userHistory } = useFetchCreditsHistory(user.id);
   const webviewRef = useRef(null);
   const [url, setUrl] = useState(null);
-  const [id_order, setIdOrder] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [number, onChangeNumber] = useState("");
-  credentials = {
-    currency: "USD",
-    value: "100",
-  };
+
   const handlePress = async () => {
+    setLoading(true);
     if (number) {
-      console.log(number);
       credentials = {
         currency: "USD",
         value: number,
@@ -41,12 +39,18 @@ export default function User() {
       }
     }
   };
-  const handleNavigationStateChange = (navState) => {
+  const handleNavigationStateChange = async (navState) => {
     const { url } = navState;
     if (url && url.includes("PayerID")) {
       setUrl(null);
       webviewRef.current.stopLoading();
-      ///--------------SI ESTA ACA DEBE LLAMARA AL ENDPOINT ADD CREDITS CON EL ID DEL USUARIO Y DEBE HACER UNA PETICION GET PARA OBTENER EL NUEVO VALOR DE LOS CREDITSO--------//
+
+      const orderId = url.match(/[?&]token=([^&]+)/)[1];
+      const { data } = await capture_order(orderId, user.id);
+      if (data) {
+        setUser({ ...user, credits: user.credits + Number(number) });
+        setLoading(false);
+      }
     }
   };
 
@@ -115,9 +119,17 @@ export default function User() {
                 keyboardType="numeric"
               />
             </View>
-            <TouchableOpacity onPress={handlePress} style={styles.paypal}>
-              <Text style={styles.buttonTextPaypal}>Pay with PayPal</Text>
-            </TouchableOpacity>
+            {loading ? (
+              <ActivityIndicator size="medium" color="#000" />
+            ) : (
+              <TouchableOpacity
+                onPress={handlePress}
+                style={styles.paypal}
+                disabled={!number}
+              >
+                <Text style={styles.buttonTextPaypal}>Pay with PayPal</Text>
+              </TouchableOpacity>
+            )}
           </View>
           <View style={styles.logout}>
             <Pressable onPress={() => logout(setUser)} style={styles.button}>

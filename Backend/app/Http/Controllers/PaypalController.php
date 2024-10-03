@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
 
 
 
@@ -42,13 +43,13 @@ class PaypalController extends Controller
     public function handleResponse($response)
     {
         try {
-            // Check if the response is from Http Client or Guzzle
             $isGuzzleResponse = method_exists($response, 'getStatusCode');
 
             $statusCode = $isGuzzleResponse ? $response->getStatusCode() : $response->status();
             $body = $isGuzzleResponse ? json_decode($response->getBody()->getContents(), true) : $response->json();
 
             if ($statusCode >= 200 && $statusCode < 300) {
+
                 return [
                     'data' => $body,
                     'httpStatusCode' => $statusCode,
@@ -57,8 +58,7 @@ class PaypalController extends Controller
                 throw new Exception($body['message'] ?? 'Error occurred.');
             }
         } catch (Exception $e) {
-            // Log the error if needed
-            // Log::error('Exception caught', ['message' => $e->getMessage()]);
+
             return [
                 'error' => $e->getMessage(),
                 'httpStatusCode' => $statusCode ?? 500, // Default to 500 if status code isn't set
@@ -135,7 +135,16 @@ class PaypalController extends Controller
         ]);
 
         // Handle the response
-        return $this->handleResponse($response);
+        $response = $this->handleResponse($response);
+        if ($response['data']['status'] === 'COMPLETED'){
+            $user = User::find($request->user_id);
+            $newCredits = (float) $response['data']['purchase_units'][0]['payments']['captures'][0]['amount']['value'];
+            $user->credits=$user->credits + $newCredits;
+            $user->save();
+            return response()->json("Credits added",201);
+        }
+
+        return response()->json("Payment failed", 500);
     }
 
 }

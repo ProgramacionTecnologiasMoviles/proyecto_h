@@ -14,3 +14,22 @@ export async function create_order(credentials) {
     console.error("Failed to fetch payment URL:", error);
   }
 }
+
+export async function capture_order(orderId, userId) {
+  try {
+    const { token } = getToken();
+    const data = await axios.post(
+      "/capture",
+      { order_id: orderId, user_id: userId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return { data };
+  } catch (error) {
+    console.error("Failed to fetch payment URL:", error);
+  }
+}
