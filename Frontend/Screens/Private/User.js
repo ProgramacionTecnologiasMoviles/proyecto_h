@@ -1,64 +1,7 @@
-import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
 import { AuthContext } from "../../contexts/WebSocketContext";
 import { useContext } from "react";
 import { logout } from "../../services/AuthService";
 import { useFetchCreditsHistory } from "../../hooks/useFetchCreditsHistory";
-
-export default function User() {
-  const { user, setUser } = useContext(AuthContext);
-  const { userHistory } = useFetchCreditsHistory(user.id);
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{user.username}</Text>
-        <Text style={styles.title}>Coins - {user.credits}</Text>
-      </View>
-      <View style={styles.userDataContainer}>
-        <Text style={styles.label}>Fullname</Text>
-        <Text style={styles.input}>{user.fullname}</Text>
-        <Text style={styles.label}>Email</Text>
-        <Text style={styles.input}>{user.email}</Text>
-      </View>
-
-      <View style={styles.creditsContainer}>
-        <View style={styles.creditsBox}>
-          <View style={styles.creditBox}>
-            <Text style={styles.titleCredits}> Credits Won</Text>
-            <View style={styles.amountBox}>
-              <Text style={styles.amount}>{userHistory.creditsWon}</Text>
-            </View>
-          </View>
-          <View style={styles.creditBox}>
-            <Text style={styles.titleCredits}> Credits available</Text>
-            <View style={styles.amountBox}>
-              <Text style={styles.amount}>{user.credits}</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.creditsBox}>
-          <View style={styles.creditBox}>
-            <Text style={styles.titleCredits}> Credits Loss</Text>
-            <View style={styles.amountBox}>
-              <Text style={styles.amount}>{userHistory.creditsLoss}</Text>
-            </View>
-          </View>
-          <View style={styles.creditBox}>
-            <Text style={styles.titleCredits}> Credits withdrawn</Text>
-            <View style={styles.amountBox}>
-              <Text style={styles.amount}>0</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.buyCreditsBox}>
-        <Text style={styles.label}>Buy more credits</Text>
-        <Text>Aqui va el boton de Paypal</Text>
-      </View>
-      <Pressable onPress={() => logout(setUser)} style={styles.button}>
-        <Text style={styles.buttonText}>Logout</Text>
-      </Pressable>
 import {
   View,
   Text,
@@ -74,10 +17,11 @@ import { useRef } from "react";
 import { create_order } from "../../services/PaypalService";
 
 export default function User() {
+  const { user, setUser } = useContext(AuthContext);
+  const { userHistory } = useFetchCreditsHistory(user.id);
   const webviewRef = useRef(null);
   const [url, setUrl] = useState(null);
   const [id_order, setIdOrder] = useState(null);
-
   credentials = {
     currency: "USD",
     value: "100",
@@ -108,9 +52,58 @@ export default function User() {
           onNavigationStateChange={handleNavigationStateChange}
         />
       ) : (
-        <TouchableOpacity onPress={handlePress} style={styles.button}>
-          <Text style={styles.buttonText}>Pay with PayPal</Text>
-        </TouchableOpacity>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>{user.username}</Text>
+            <Text style={styles.title}>Coins - {user.credits}</Text>
+          </View>
+          <View style={styles.userDataContainer}>
+            <Text style={styles.label}>Fullname</Text>
+            <Text style={styles.input}>{user.fullname}</Text>
+            <Text style={styles.label}>Email</Text>
+            <Text style={styles.input}>{user.email}</Text>
+          </View>
+
+          <View style={styles.creditsContainer}>
+            <View style={styles.creditsBox}>
+              <View style={styles.creditBox}>
+                <Text style={styles.titleCredits}> Credits Won</Text>
+                <View style={styles.amountBox}>
+                  <Text style={styles.amount}>{userHistory.creditsWon}</Text>
+                </View>
+              </View>
+              <View style={styles.creditBox}>
+                <Text style={styles.titleCredits}> Credits available</Text>
+                <View style={styles.amountBox}>
+                  <Text style={styles.amount}>{user.credits}</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.creditsBox}>
+              <View style={styles.creditBox}>
+                <Text style={styles.titleCredits}> Credits Loss</Text>
+                <View style={styles.amountBox}>
+                  <Text style={styles.amount}>{userHistory.creditsLoss}</Text>
+                </View>
+              </View>
+              <View style={styles.creditBox}>
+                <Text style={styles.titleCredits}> Credits withdrawn</Text>
+                <View style={styles.amountBox}>
+                  <Text style={styles.amount}>0</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View style={styles.buyCreditsBox}>
+            <Text style={styles.label}>Buy more credits</Text>
+            <TouchableOpacity onPress={handlePress} style={styles.button}>
+              <Text style={styles.buttonText}>Pay with PayPal</Text>
+            </TouchableOpacity>
+          </View>
+          <Pressable onPress={() => logout(setUser)} style={styles.button}>
+            <Text style={styles.buttonText}>Logout</Text>
+          </Pressable>
+        </View>
       )}
     </View>
   );
