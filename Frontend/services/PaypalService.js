@@ -1,12 +1,8 @@
-import axios from "axios";
-import { getToken } from "./TokenService";
+import axios from "../hooks/axios";
 
 export async function create_order(credentials) {
   try {
-    const { data } = await axios.post(
-      "http://192.168.1.21:8000/api/create_order",
-      credentials
-    );
+    const { data } = await axios.post("/create_order", credentials);
     console.log(data);
     if (data && data.data && data.data.links && data.data.links[1]) {
       const paymentUrl = data.data.links[1].href;

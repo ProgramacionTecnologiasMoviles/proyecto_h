@@ -1,56 +1,78 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-  SafeAreaView,
-} from "react-native";
-import { WebView } from "react-native-webview";
-import React, { useState, useEffect } from "react";
-import { useRef } from "react";
-import { create_order } from "../../services/PaypalService";
+import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
+import { useEditDataUser } from "../../hooks/useEditDataUser";
 
 export default function User() {
-  const webviewRef = useRef(null);
-  const [url, setUrl] = useState(null);
-  const [id_order, setIdOrder] = useState(null);
-
-  credentials = {
-    currency: "USD",
-    value: "100",
-  };
-  const handlePress = async () => {
-    const response = await create_order(credentials);
-    console.log(response);
-    if (response) {
-      setUrl(response.url);
-    }
-  };
-  const handleNavigationStateChange = (navState) => {
-    const { url } = navState;
-    if (url && url.includes("PayerID")) {
-      setUrl(null);
-      webviewRef.current.stopLoading();
-    }
-  };
+  const { user, editing, setEditing, handleEdit } = useEditDataUser();
 
   return (
     <View style={styles.container}>
-      {url ? (
-        <WebView
-          source={{ uri: url }}
-          ref={webviewRef}
-          style={{ flex: 1 }}
-          setSupportMultipleWindows={false}
-          onNavigationStateChange={handleNavigationStateChange}
+      <View style={styles.header}>
+        <Text style={styles.title}>{user.username}</Text>
+        <Text style={styles.title}>Coins - {user.credits}</Text>
+      </View>
+      <View style={styles.userDataContainer}>
+        <Text style={styles.label}>Fullname</Text>
+        <TextInput
+          style={styles.input}
+          value={user.fullname}
+          onChangeText={(text) => setFullname(text)}
+          placeholderTextColor="#ccc"
+          editable={editing}
         />
-      ) : (
-        <TouchableOpacity onPress={handlePress} style={styles.button}>
-          <Text style={styles.buttonText}>Pay with PayPal</Text>
-        </TouchableOpacity>
-      )}
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          value={user.email}
+          onChangeText={(text) => setEmail(text)}
+          placeholderTextColor="#ccc"
+          editable={editing}
+        />
+        <View style={styles.creditsBox}>
+          <View style={styles.creditBox}>
+            <Text style={styles.titleCredits}> Credits Spend</Text>
+            <View style={styles.amountBox}>
+              <Text style={styles.amount}>1</Text>
+            </View>
+          </View>
+          <View style={styles.creditBox}>
+            <Text style={styles.titleCredits}> Credits available</Text>
+            <View style={styles.amountBox}>
+              <Text style={styles.amount}>{user.credits}</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.creditsBox}>
+          <View style={styles.creditBox}>
+            <Text style={styles.titleCredits}> Credits won</Text>
+            <View style={styles.amountBox}>
+              <Text style={styles.amount}>1</Text>
+            </View>
+          </View>
+          <View style={styles.creditBox}>
+            <Text style={styles.titleCredits}> Credits withdrawn</Text>
+            <View style={styles.amountBox}>
+              <Text style={styles.amount}>{user.credits}</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.buyCreditsBox}>
+          <Text style={styles.label}>Buy more credits</Text>
+          <Text>Aqui va el boton de Paypal</Text>
+        </View>
+
+        {editing ? (
+          <Pressable style={styles.button} onPress={handleEdit}>
+            <Text style={styles.buttonText}> Update </Text>
+          </Pressable>
+        ) : (
+          <Pressable style={styles.button} onPress={() => setEditing(true)}>
+            <Text style={styles.buttonText}> Edit Account </Text>
+          </Pressable>
+        )}
+
+        <Text style={styles.logout}>Logout</Text>
+      </View>
     </View>
   );
 }
@@ -58,7 +80,8 @@ export default function User() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "blue",
+    backgroundColor: "#2D9BF0",
+    alignItems: "center",
   },
   header: {
     flexDirection: "row",
