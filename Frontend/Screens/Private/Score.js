@@ -15,11 +15,12 @@ import { match_info, players_id_match } from "../../services/GameService";
 import { credits_transation } from "../../services/GameService";
 import { removeTrailingZeros } from "../../services/GameService";
 import { get_name_player } from "../../services/GameService";
+import { loadUser } from "../../services/AuthService";
 
 export default function Score({ route, navigation }) {
   const { loser } = route.params;
   const { ws } = useWebSocket();
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const [player1, setPlayer1] = useState("");
   const [player2, setPlayer2] = useState("");
   const [w_name, setWname] = useState("");
@@ -117,7 +118,13 @@ export default function Score({ route, navigation }) {
       }
     }
   }, [winner, hostPlayer, loser, gameId]);
-  console.log(info_game);
+
+  const handleGoBack = async () => {
+    const user = await loadUser();
+    setUser(user);
+    navigation.navigate("Home");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {isLoser ? (
@@ -149,7 +156,7 @@ export default function Score({ route, navigation }) {
             </View>
           </View>
           <View style={styles.navBar}>
-            <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+            <TouchableOpacity onPress={handleGoBack}>
               <Text style={styles.linkText}>Go to Home</Text>
             </TouchableOpacity>
           </View>
@@ -179,7 +186,7 @@ export default function Score({ route, navigation }) {
             </View>
           </View>
           <View style={styles.navBar}>
-            <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+            <TouchableOpacity onPress={handleGoBack}>
               <Text style={styles.linkText}>Go to Home</Text>
             </TouchableOpacity>
           </View>

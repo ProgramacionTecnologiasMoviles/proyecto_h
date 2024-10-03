@@ -228,11 +228,11 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 60,
-    width: "50%",
+    width: "30%",
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 20,
     borderRadius: 20,
   },
   paypal: {
