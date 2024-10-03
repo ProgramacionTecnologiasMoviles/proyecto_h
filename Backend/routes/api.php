@@ -35,6 +35,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::post('/users', [UsersController::class,'store']);
 Route::post('/name_players', [UsersController::class,'name_players']);
+Route::post('/add_credits', [UsersController::class,'add_credits']);
 Route::put('/users/{id}', [UsersController::class,'update'])->middleware('auth:sanctum');
 #----------------------------CREDITS---------------------------------#
 Route::post('/update_Credits', [UsersController::class, 'updateCredits'])->middleware('auth:sanctum');

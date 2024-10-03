@@ -22,15 +22,23 @@ export default function User() {
   const webviewRef = useRef(null);
   const [url, setUrl] = useState(null);
   const [id_order, setIdOrder] = useState(null);
+  const [number, onChangeNumber] = useState("");
   credentials = {
     currency: "USD",
     value: "100",
   };
   const handlePress = async () => {
-    const response = await create_order(credentials);
-    console.log(response);
-    if (response) {
-      setUrl(response.url);
+    if (number) {
+      console.log(number);
+      credentials = {
+        currency: "USD",
+        value: number,
+      };
+      const response = await create_order(credentials);
+      console.log(response);
+      if (response) {
+        setUrl(response.url);
+      }
     }
   };
   const handleNavigationStateChange = (navState) => {
@@ -38,6 +46,7 @@ export default function User() {
     if (url && url.includes("PayerID")) {
       setUrl(null);
       webviewRef.current.stopLoading();
+      ///--------------SI ESTA ACA DEBE LLAMARA AL ENDPOINT ADD CREDITS CON EL ID DEL USUARIO Y DEBE HACER UNA PETICION GET PARA OBTENER EL NUEVO VALOR DE LOS CREDITSO--------//
     }
   };
 
@@ -96,6 +105,16 @@ export default function User() {
           </View>
           <View style={styles.buyCreditsBox}>
             <Text style={styles.label}>Buy more credits</Text>
+            <View style={styles.inputCredits}>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeNumber}
+                value={number}
+                textAlign={"center"}
+                placeholder="Insertar el numero de creditos"
+                keyboardType="numeric"
+              />
+            </View>
             <TouchableOpacity onPress={handlePress} style={styles.paypal}>
               <Text style={styles.buttonTextPaypal}>Pay with PayPal</Text>
             </TouchableOpacity>
@@ -115,6 +134,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#2D9BF0",
+  },
+  input: {
+    height: 40,
+    maxWidth: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    textAlign: "center",
+    alignContent: "center",
   },
   header: {
     flexDirection: "row",
