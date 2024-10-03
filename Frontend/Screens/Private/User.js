@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
-import { useEditDataUser } from "../../hooks/useEditDataUser";
+import { AuthContext } from "../../contexts/WebSocketContext";
+import { useContext } from "react";
 
 export default function User() {
-  const { user, editing, setEditing, handleEdit } = useEditDataUser();
+  const { user } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -12,21 +13,12 @@ export default function User() {
       </View>
       <View style={styles.userDataContainer}>
         <Text style={styles.label}>Fullname</Text>
-        <TextInput
-          style={styles.input}
-          value={user.fullname}
-          onChangeText={(text) => setFullname(text)}
-          placeholderTextColor="#ccc"
-          editable={editing}
-        />
+        <Text style={styles.input}>{user.fullname}</Text>
         <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          value={user.email}
-          onChangeText={(text) => setEmail(text)}
-          placeholderTextColor="#ccc"
-          editable={editing}
-        />
+        <Text style={styles.input}>{user.email}</Text>
+      </View>
+
+      <View style={styles.creditsContainer}>
         <View style={styles.creditsBox}>
           <View style={styles.creditBox}>
             <Text style={styles.titleCredits}> Credits Spend</Text>
@@ -55,24 +47,13 @@ export default function User() {
             </View>
           </View>
         </View>
-
-        <View style={styles.buyCreditsBox}>
-          <Text style={styles.label}>Buy more credits</Text>
-          <Text>Aqui va el boton de Paypal</Text>
-        </View>
-
-        {editing ? (
-          <Pressable style={styles.button} onPress={handleEdit}>
-            <Text style={styles.buttonText}> Update </Text>
-          </Pressable>
-        ) : (
-          <Pressable style={styles.button} onPress={() => setEditing(true)}>
-            <Text style={styles.buttonText}> Edit Account </Text>
-          </Pressable>
-        )}
-
-        <Text style={styles.logout}>Logout</Text>
       </View>
+
+      <View style={styles.buyCreditsBox}>
+        <Text style={styles.label}>Buy more credits</Text>
+        <Text>Aqui va el boton de Paypal</Text>
+      </View>
+      <Text style={styles.logout}>Logout</Text>
     </View>
   );
 }
@@ -94,15 +75,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     height: 100,
-    fontWeight: "bold",
+    fontFamily: "Fredoka_600SemiBold",
   },
   userDataContainer: {
     width: "100%",
-    padding: 20,
+    paddingHorizontal: 20,
   },
   label: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 25,
+    fontFamily: "Fredoka_600SemiBold",
     marginBottom: 10,
   },
   input: {
@@ -120,6 +101,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 10,
+    textAlignVertical: "center",
+    fontFamily: "Fredoka_600SemiBold",
+    fontSize: 22,
+  },
+  creditsContainer: {
+    width: "100%",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    marginRight: 20,
   },
   creditsBox: {
     flexDirection: "row",
@@ -132,7 +122,7 @@ const styles = StyleSheet.create({
   },
   titleCredits: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Fredoka_600SemiBold",
     marginBottom: 10,
   },
   amountBox: {
@@ -148,7 +138,7 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontSize: 20,
-    fontWeight: "900",
+    fontFamily: "Fredoka_600SemiBold",
   },
   buyCreditsBox: {
     marginVertical: 20,

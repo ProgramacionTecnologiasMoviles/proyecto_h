@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   backgroundOverlay: {
-    ...StyleSheet.absoluteFillObject, // Fills the entire screen
-    backgroundColor: "rgba(0, 0, 0, 0.8)", // Semi-transparent background
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     zIndex: -1,
   },
   smallBox: {
