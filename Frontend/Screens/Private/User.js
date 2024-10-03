@@ -42,12 +42,12 @@ export default function User() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {url ? (
         <WebView
           source={{ uri: url }}
           ref={webviewRef}
-          style={{ flex: 1 }}
+          style={{ flex: 1, marginTop: 40 }}
           setSupportMultipleWindows={false}
           onNavigationStateChange={handleNavigationStateChange}
         />
@@ -107,7 +107,7 @@ export default function User() {
           </View>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   userDataContainer: {
     width: "100%",
     paddingHorizontal: 20,
-    marginTop: 90,
+    marginTop: 5,
   },
   label: {
     fontSize: 25,
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     fontFamily: "Fredoka_600SemiBold",
   },
   buyCreditsBox: {
-    marginTop: 90,
+    marginTop: 10,
     width: "100%",
     alignItems: "center",
   },
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 40,
     borderRadius: 20,
   },
   paypal: {
@@ -213,12 +213,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#FCBB32",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 10,
     borderRadius: 20,
   },
   buttonTextPaypal: {
     color: "#0070BA",
-    fontSize: 30,
+    fontSize: 20,
     fontFamily: "Fredoka_600SemiBold",
   },
   buttonText: {
