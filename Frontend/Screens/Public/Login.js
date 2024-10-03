@@ -9,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/WebSocketContext";
+import { ScrollView } from "react-native";
 import { login, loadUser } from "../../services/AuthService";
 
 export default function Login({ navigation }) {
@@ -31,36 +32,40 @@ export default function Login({ navigation }) {
   }
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text style={styles.title}>WAGER WARS</Text>
-        <Text style={styles.subtitle}>Login to your Account</Text>
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputext}>Email</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="superhero@gmail.com"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            placeholderTextColor="#000"
-          />
-          <Text style={styles.inputext}>Password</Text>
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={styles.title}>WAGER WARS</Text>
+          <Text style={styles.subtitle}>Login to your Account</Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputext}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="superhero@gmail.com"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+              placeholderTextColor="#000"
+            />
+            <Text style={styles.inputext}>Password</Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            secureTextEntry
-            placeholderTextColor="#000"
-          />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              secureTextEntry
+              placeholderTextColor="#000"
+            />
+          </View>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+            <Text style={styles.linkText}>
+              No tienes una cuenta? Registrate
+            </Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={styles.linkText}>No tienes una cuenta? Registrate</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

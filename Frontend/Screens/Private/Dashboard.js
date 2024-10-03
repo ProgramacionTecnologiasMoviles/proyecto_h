@@ -5,13 +5,14 @@ import { useFetchStatisticsUser } from "../../hooks/useFetchStatisticsUser";
 import LeaderboardBox from "../../components/dashboard/LeaderboardBox";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/WebSocketContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Dashboard() {
   const { userStatistics, loading } = useFetchStatisticsUser();
   const { user } = useContext(AuthContext);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Dashboard</Text>
         <Text style={styles.title}>Coins - {user.credits}</Text>
@@ -27,7 +28,7 @@ export default function Dashboard() {
           <LeaderboardBox leaderboard={userStatistics.leaderboard} />
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -42,7 +43,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "10%",
     justifyContent: "space-between",
-    marginTop: 20,
     paddingHorizontal: 30,
   },
   title: {

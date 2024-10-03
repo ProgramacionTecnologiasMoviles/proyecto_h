@@ -1,8 +1,12 @@
 import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
 import { useEditDataUser } from "../../hooks/useEditDataUser";
+import { logout } from "../../services/AuthService";
+import { AuthContext } from "../../contexts/WebSocketContext";
+import { useContext } from "react";
 
 export default function User() {
   const { user, editing, setEditing, handleEdit } = useEditDataUser();
+  const { setUser } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -71,7 +75,9 @@ export default function User() {
           </Pressable>
         )}
 
-        <Text style={styles.logout}>Logout</Text>
+        <Pressable onPress={() => logout(setUser)}>
+          <Text style={styles.logout}>Logout</Text>
+        </Pressable>
       </View>
     </View>
   );
