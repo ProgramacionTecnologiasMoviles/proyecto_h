@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { fetchUserMatches, fetchLeaderBoard } from "../services/UserService";
-import { useContext } from "react";
-import { AuthContext } from "../contexts/WebSocketContext";
 
 export const useFetchStatisticsUser = () => {
   const [userStatistics, setUserStatistics] = useState({});

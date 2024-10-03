@@ -1,9 +1,12 @@
 import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
 import { AuthContext } from "../../contexts/WebSocketContext";
 import { useContext } from "react";
+import { logout } from "../../services/AuthService";
+import { useFetchCreditsHistory } from "../../hooks/useFetchCreditsHistory";
 
 export default function User() {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
+  const { userHistory } = useFetchCreditsHistory(user.id);
 
   return (
     <View style={styles.container}>
@@ -21,9 +24,9 @@ export default function User() {
       <View style={styles.creditsContainer}>
         <View style={styles.creditsBox}>
           <View style={styles.creditBox}>
-            <Text style={styles.titleCredits}> Credits Spend</Text>
+            <Text style={styles.titleCredits}> Credits Won</Text>
             <View style={styles.amountBox}>
-              <Text style={styles.amount}>1</Text>
+              <Text style={styles.amount}>{userHistory.creditsWon}</Text>
             </View>
           </View>
           <View style={styles.creditBox}>
@@ -35,15 +38,15 @@ export default function User() {
         </View>
         <View style={styles.creditsBox}>
           <View style={styles.creditBox}>
-            <Text style={styles.titleCredits}> Credits won</Text>
+            <Text style={styles.titleCredits}> Credits Loss</Text>
             <View style={styles.amountBox}>
-              <Text style={styles.amount}>1</Text>
+              <Text style={styles.amount}>{userHistory.creditsLoss}</Text>
             </View>
           </View>
           <View style={styles.creditBox}>
             <Text style={styles.titleCredits}> Credits withdrawn</Text>
             <View style={styles.amountBox}>
-              <Text style={styles.amount}>{user.credits}</Text>
+              <Text style={styles.amount}>0</Text>
             </View>
           </View>
         </View>
@@ -53,7 +56,9 @@ export default function User() {
         <Text style={styles.label}>Buy more credits</Text>
         <Text>Aqui va el boton de Paypal</Text>
       </View>
-      <Text style={styles.logout}>Logout</Text>
+      <Pressable onPress={() => logout(setUser)} style={styles.button}>
+        <Text style={styles.buttonText}>Logout</Text>
+      </Pressable>
     </View>
   );
 }
@@ -147,24 +152,16 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 60,
-    width: "100%",
-    backgroundColor: "#fff",
+    width: "50%",
+    backgroundColor: "black",
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 5,
     marginTop: 50,
     borderRadius: 20,
   },
   buttonText: {
-    color: "black",
-    fontSize: 18,
-    fontWeight: "bold",
-    // fontFamily: "Fredoka_600SemiBold",
-  },
-  logout: {
-    textAlign: "center",
-    marginTop: 10,
     color: "white",
-    fontWeight: "bold",
+    fontSize: 20,
+    fontFamily: "Fredoka_600SemiBold",
   },
 });
