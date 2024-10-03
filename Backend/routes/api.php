@@ -58,4 +58,6 @@ Route::post('/join_match', [MatchController::class, 'join_match']);
 #-------------------------------------PAYPAL ROUTES----------------------------------#
 
 Route::post('/orders', [PaypalController::class, 'createOrder']);
+Route::post('/access_token', [PaypalController::class, 'generateAccessToken']);
+Route::post('/create_order', [PaypalController::class, 'createOrder']);
 Route::post('/capture', [PaypalController::class, 'captureOrder']);

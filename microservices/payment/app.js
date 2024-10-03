@@ -16,7 +16,7 @@ window.paypal
 
     async createOrder() {
       try {
-        const response = await fetch("http://192.168.20.51:8000/api/orders", {
+        const response = await fetch("http://192.168.183.108:8000/api/orders", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -41,13 +41,16 @@ window.paypal
 
     async onApprove(data, actions) {
       try {
-        const response = await fetch(`http://192.168.20.51:8000/api/capture`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ orderId: data.orderID }),
-        });
+        const response = await fetch(
+          `http://192.168.183.108:8000/api/capture`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ orderId: data.orderID }),
+          }
+        );
 
         const responseJson = await response.json();
 

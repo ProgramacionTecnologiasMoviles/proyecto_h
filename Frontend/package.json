@@ -10,6 +10,7 @@
     "postinstall": "npx setup-skia-web public && node path-fs-canvaskit-postinstall.js"
   },
   "dependencies": {
+    "@ekreative/react-native-paypal": "^1.1.0",
     "@expo-google-fonts/fredoka": "^0.2.3",
     "@expo-google-fonts/permanent-marker": "^0.2.3",
     "@expo/metro-runtime": "~3.1.3",
@@ -22,6 +23,7 @@
     "expo": "~50.0.17",
     "expo-font": "~11.10.3",
     "expo-linear-gradient": "~12.7.2",
+    "expo-paypal": "^1.4.1",
     "expo-secure-store": "~12.8.1",
     "expo-splash-screen": "~0.26.5",
     "expo-status-bar": "~1.11.1",
@@ -29,11 +31,13 @@
     "react-dom": "18.2.0",
     "react-native": "0.73.6",
     "react-native-gesture-handler": "~2.14.0",
+    "react-native-paypal-reborn": "^2.1.1",
     "react-native-reanimated": "~3.6.2",
     "react-native-safe-area-context": "^4.10.9",
     "react-native-screens": "^3.34.0",
     "react-native-web": "~0.19.6",
-    "react-native-webview": "13.6.4"
+    "react-native-webview": "13.6.4",
+    "react-paypal-button-v2": "^2.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

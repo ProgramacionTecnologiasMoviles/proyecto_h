@@ -67,25 +67,38 @@ class PaypalController extends Controller
     }
 
 
-    public function createOrder(){
+    public function createOrder(Request $request){
 
 
         $accessToken = $this->generateAccessToken();
 
         $url = 'https://api-m.sandbox.paypal.com/v2/checkout/orders'; 
-        
-        $payload = [
-            'intent' => 'CAPTURE',
-            'purchase_units' => [
-                [
-                    'amount' => [
-                        'currency_code' => 'USD',
-                        'value' => '10',
-                    ],
-                ],
-            ],
-        ];
 
+
+        $payload = [
+        "intent" => "CAPTURE",
+        "purchase_units" => [
+            [
+                "amount" => [
+                    "currency_code" => $request->currency,
+                    "value" => $request->value
+                ]
+            ]
+        ],
+        "payment_source" => [
+            "paypal" => [
+                "experience_context" => [
+                    "payment_method_preference" => "IMMEDIATE_PAYMENT_REQUIRED",
+                    "brand_name" => "EXAMPLE INC",
+                    "locale" => "en-US",
+                    "landing_page" => "LOGIN",
+                    "user_action" => "PAY_NOW",
+                    "return_url" => "https://example.com/returnUrl",
+                    "cancel_url" => "https://example.com/cancelUrl"
+                ]
+            ]
+        ]
+    ];
         try {
             $response = Http::withToken($accessToken)
                 ->withOptions(['verify' => false])
@@ -101,14 +114,14 @@ class PaypalController extends Controller
     public function captureOrder(Request $request)
     {
     
-        $orderID = $request->orderId; 
+        $order_id = $request->order_id; 
 
         $accessToken = $this->generateAccessToken();
 
         $base = 'https://api-m.sandbox.paypal.com';
         
 
-        $url = "{$base}/v2/checkout/orders/{$orderID}/capture";
+        $url = "{$base}/v2/checkout/orders/{$order_id}/capture";
 
         $client = new Client(['verify' => false]);
 

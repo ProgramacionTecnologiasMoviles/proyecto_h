@@ -9,7 +9,6 @@ import {
 import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/WebSocketContext";
 import { create_match } from "../../services/GameService";
-
 export default function Home({ navigation }) {
   const { user, setUser } = useContext(AuthContext);
   const [number, onChangeNumber] = React.useState("");
@@ -69,6 +68,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9C527",
     alignItems: "center",
   },
+
   header: {
     flexDirection: "row",
     width: "100%",
