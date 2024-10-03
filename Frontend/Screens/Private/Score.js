@@ -170,14 +170,14 @@ export default function Score({ route, navigation }) {
             style={styles.trophy}
           />
           <View style={styles.playersContainer}>
-            <View style={[styles.playerPodium, styles.winnerPodium]}>
+            <View style={styles.winnerPodium}>
               <Image
                 source={require("../../assets/yellow_bird.png")}
                 style={styles.bird}
               />
               <Text style={styles.playerText}>1° Lugar : {w_name}</Text>
             </View>
-            <View style={styles.playerPodium}>
+            <View>
               <Image
                 source={require("../../assets/red_bird.png")}
                 style={styles.bird}
@@ -228,7 +228,8 @@ const styles = StyleSheet.create({
   linkText: {
     color: "blue",
     fontSize: 26,
-    fontFamily: "Fredoka_500Medium",
+    marginTop: 30,
+    fontFamily: "Fredoka_600SemiBold",
   },
 
   bird: {
@@ -236,8 +237,11 @@ const styles = StyleSheet.create({
     height: 200,
   },
   playerText: {
-    fontFamily: "Fredoka_500Medium",
-    fontSize: 36,
-    marginTop: 10,
+    fontFamily: "Fredoka_600SemiBold",
+    fontSize: 24,
+    textAlign: "center",
+  },
+  winnerPodium: {
+    marginTop: -40,
   },
 });
