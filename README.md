@@ -11,12 +11,14 @@
 2. Correr los siguientes comandos
 
 ```
-$ docker compose build
+$ docker composer build
 $ docker composer up -d
 $ docker exec -it backend-web-1 php artisan migrate
 ```
 
 3. El servidor esta corriendo en el puerto 8000
+
+   Para correr el resto de servicios se debe instalar las depencias y correr la app con el comando `npx expo start` y a su vez se debe agregar una variable de entorno donde se indiquie la ip del backend `EXPO_PUBLIC_BASE_IP` para el microservicio se debe instalar fastapi `pip install "fastapi[standard]" `y se ejecuta con el comando `uvicorn main:app --host 0.0.0.0 --port 3000`
 
 ## Modelo Relacional
 
@@ -56,7 +58,6 @@ Rutas disponibles en la API, incluyendo los métodos HTTP soportados, parámetro
     "status": 200
   }
   ```
-
 - GET (Obtener usuario actual)
 
   Necesita el token dado al realizar el login.
@@ -79,7 +80,6 @@ Rutas disponibles en la API, incluyendo los métodos HTTP soportados, parámetro
     "updated_at": "2024-09-02T02:41:20.000000Z"
   }
   ```
-
 - PUT (Actualiza el usuario)
 
   Necesita el token dado al realizar el login.
@@ -101,7 +101,6 @@ Rutas disponibles en la API, incluyendo los métodos HTTP soportados, parámetro
   ```
     "El Usuario se ha actualizado exitosamente"
   ```
-
 - DELETE ( Elimina usuario)
 
   Necesita el token dado al realizar el login.
@@ -138,7 +137,6 @@ Todas las peticiones necesitan el token dado al realizar el login.
   ```
    "El Registro Bancario se ha agregado exitosamente"
   ```
-
 - GET (Retorna cuentas de banco del usario)
 
   URL : ` http://localhost:8000/api/bank_accounts`
@@ -157,7 +155,6 @@ Todas las peticiones necesitan el token dado al realizar el login.
     }
   ]
   ```
-
 - PUT (Actualiza cuenta de banco en especifico)
 
   URL : ` http://localhost:8000/api/bank_accounts/{id}`
@@ -177,7 +174,6 @@ Todas las peticiones necesitan el token dado al realizar el login.
   ```
    "El Registro Bancario se ha actualizado exitosamente"
   ```
-
 - DELETE (Elimina la cuenta de banco )
 
   URL : ` http://localhost:8000/api/bank_accounts/{id}`
@@ -216,7 +212,6 @@ Todas las peticiones necesitan el token dado al realizar el login.
         }
     ]
   ```
-
 - GET (Lista juegos)
 
   URL : ` http://localhost:8000/api/Game`
@@ -241,7 +236,6 @@ Todas las peticiones necesitan el token dado al realizar el login.
     }
   ]
   ```
-
 - DELETE (Eliminar juego)
 
   URL : ` http://localhost:8000/api/Game/{id}`
@@ -251,7 +245,6 @@ Todas las peticiones necesitan el token dado al realizar el login.
   ```
   "El Registro del juego se ha eliminado exitosamente"
   ```
-
 - PUT (Actualizar juego especifico)
 
   URL : ` http://localhost:8000/api/Game/{id}`
@@ -299,7 +292,6 @@ Todas las peticiones necesitan el token dado al realizar el login.
     "id": 5
     }
   ```
-
 - GET (Lista partidas)
 
   URL : ` http://localhost:8000/api/match`
@@ -334,7 +326,6 @@ Todas las peticiones necesitan el token dado al realizar el login.
     }
   ]
   ```
-
 - DELETE (Elimina partida)
 
   URL : ` http://localhost:8000/api/match/{id}`
@@ -344,7 +335,6 @@ Todas las peticiones necesitan el token dado al realizar el login.
   ```
   "El Registro de la partida se ha eliminado exitosamente"
   ```
-
 - PUT (Actualizar partida especifica)
 
   URL : ` http://localhost:8000/api/match/{id}`
