@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Matches;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -91,16 +92,18 @@ class UsersController extends Controller
         $data=$request->validate([
             'user_winner'=> 'required|exists:users,id',
             'user_loser'=> 'required|exists:users,id',
-            'credits_bet'=> 'required|integer'
+            'game_id'=> 'required|integer'
         ]);
         try{
             DB::beginTransaction();
             ## Encontramos los ususarios
             $winner=User::findorFail($data['user_winner']);
             $loser=User::findorFail($data['user_loser']);
+            #Encontramos la partida 
+            $match = Matches::find($request->game_id);
             ## Actualizamos los creditos 
-            $winner->credits=$winner->credits + $data['credits_bet'];
-            $loser->credits=$loser->credits - $data['credits_bet'];
+            $winner->credits=$winner->credits + $match->creditsbetted;
+            $loser->credits=$loser->credits - $match->creditsbetted;
             $winner->save();
             $loser->save();
             DB::commit();

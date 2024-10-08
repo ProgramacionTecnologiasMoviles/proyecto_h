@@ -59,7 +59,7 @@ class MatchController extends Controller
         $match = Matches::find($request->id);
         $match->hostUser =$request->hostUser;
         $match->guessUser =$request->guessUser;
-        $match->creditsbetted =$request->creditsbetted;
+        $match->creditsbetted =$match->creditsbetted;
         $match->game =$request->game;
         $match->winner =$request->winner;
         $match->loser =$request->loser;

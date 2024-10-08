@@ -105,8 +105,9 @@ export default function Score({ route, navigation }) {
             const creditCredentials = {
               user_winner: winner,
               user_loser: loser,
-              credits_bet: 1,
+              game_id: removeTrailingZeros(gameId),
             };
+            console.log(removeTrailingZeros(gameId));
             await credits_transation(creditCredentials);
             const nameCredentials = {
               winner_id: winner,

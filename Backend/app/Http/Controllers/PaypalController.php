@@ -16,8 +16,8 @@ class PaypalController extends Controller
 {
     public function generateAccessToken()
     {
-        $clientId = 'AeVNUDFQXKq1uSr-vbLe9TK9uehNOx_BCFyLLpJAl_q0d15Rb8KzX1aDGQYObb3KblKTduurg_SDPOXL';
-        $clientSecret = 'EDut3hn4OEqRvj8bej9jK5uBkjXsHIR4bk8YOC74SMO1jNQJ3i611ZXqcB0S6F9XfcdDgnGPJ_QAMb-z';
+        $clientId = env('CLIENT_ID');
+        $clientSecret = env('CLIENT_SECRET');
 
         $base64EncodedClientIdAndSecret = base64_encode("$clientId:$clientSecret");
 
